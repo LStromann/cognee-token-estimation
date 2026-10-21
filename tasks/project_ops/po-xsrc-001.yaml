@@ -1,0 +1,9 @@
+id: po-xsrc-001
+topic: project_ops
+type: cross_source
+hops: 3
+needs: [memory, mcp]
+turns:
+  - "Is the open PR for sync retries consistent with what the team last decided? If not, what exactly differs?"
+gold: "No. PR #91 uses max_retries=5. The latest decision (eng sync 2026-09-16, confirmed by Jonas in #eng) is max 4 retries with jitter."
+grader: {kind: llm_judge, rubric: "Pass if it says inconsistent, PR uses 5, latest decision is 4 with jitter. Fail if it treats 5 as current."}

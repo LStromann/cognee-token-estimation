@@ -1,0 +1,3 @@
+{
+  "_comment": "Base settings for the cognee arm. Cognee hooks go in config/experiment.yaml (cognee.hooks); the harness adds them here, wrapped for logging."
+}

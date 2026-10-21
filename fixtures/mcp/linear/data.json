@@ -1,0 +1,102 @@
+{
+ "users": [
+  {
+   "id": "maya",
+   "name": "Maya Chen",
+   "role": "CEO"
+  },
+  {
+   "id": "jonas",
+   "name": "Jonas Weber",
+   "role": "Eng Lead"
+  },
+  {
+   "id": "priya",
+   "name": "Priya Nair",
+   "role": "PM"
+  },
+  {
+   "id": "tom",
+   "name": "Tom Okafor",
+   "role": "Backend"
+  },
+  {
+   "id": "lea",
+   "name": "Lea Fischer",
+   "role": "Support Lead"
+  }
+ ],
+ "projects": [
+  {
+   "id": "PRJ-1",
+   "name": "Sync Reliability",
+   "lead": "jonas",
+   "description": "Make sync robust under failures."
+  },
+  {
+   "id": "PRJ-2",
+   "name": "Webhooks GA",
+   "lead": "priya",
+   "description": "Ship webhooks to general availability."
+  }
+ ],
+ "issues": [
+  {
+   "id": "LIN-142",
+   "title": "Implement exponential backoff for sync retries",
+   "state": "In Progress",
+   "assignee": "tom",
+   "project": "Sync Reliability",
+   "labels": [
+    "backend"
+   ],
+   "updated": "2026-09-05",
+   "description": "Per 2026-09-02 eng sync: exponential backoff, base 2s, max 5 retries. Spec: Notion 'Sync Retry Policy v2'."
+  },
+  {
+   "id": "LIN-151",
+   "title": "Webhooks GA: signature verification",
+   "state": "Todo",
+   "assignee": "tom",
+   "project": "Webhooks GA",
+   "labels": [
+    "backend",
+    "security"
+   ],
+   "updated": "2026-09-10",
+   "description": "HMAC-SHA256 signatures on all webhook payloads."
+  },
+  {
+   "id": "LIN-155",
+   "title": "Brightwave: duplicate records after sync failure",
+   "state": "Triage",
+   "assignee": "jonas",
+   "project": "Sync Reliability",
+   "labels": [
+    "customer",
+    "bug"
+   ],
+   "updated": "2026-09-12",
+   "description": "Reported by Lea. Duplicates appear after a failed sync is retried. GitHub #88."
+  },
+  {
+   "id": "LIN-160",
+   "title": "Update onboarding docs for webhooks",
+   "state": "Backlog",
+   "assignee": "priya",
+   "project": "Webhooks GA",
+   "labels": [
+    "docs"
+   ],
+   "updated": "2026-09-11",
+   "description": ""
+  }
+ ],
+ "comments": [
+  {
+   "issueId": "LIN-155",
+   "author": "jonas",
+   "body": "Likely retries are not idempotent. Will look after LIN-142."
+  }
+ ]
+}

@@ -1,0 +1,8 @@
+mcp_servers: [linear, granola, notion, slack, github]
+settings: config/settings/cognee.json
+extra_mcp:
+  cognee:                    # TODO: real Cognee MCP launch command
+    command: cognee-mcp
+    args: []
+    env:
+      COGNEE_DATASET: "ctb_{topic}"

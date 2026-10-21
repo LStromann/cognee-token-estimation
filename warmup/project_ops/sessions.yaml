@@ -1,0 +1,15 @@
+topic: project_ops
+sessions:
+  - id: w1
+    turns:
+      - "Catch me up on the sync retry work: what was decided, which ticket tracks it, and where's the spec?"
+  - id: w2
+    turns:
+      - "What's going on with Brightwave? Check support, Linear and GitHub."
+      - "Who is on it and what's the suspected cause?"
+  - id: w3
+    turns:
+      - "Give me a status of the Webhooks GA project from Linear and the launch plan."
+  - id: w4
+    turns:
+      - "Read #eng and #launch from the last two weeks and tell me anything that changes our plans."

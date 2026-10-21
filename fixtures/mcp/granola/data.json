@@ -1,0 +1,79 @@
+{
+ "meetings": [
+  {
+   "id": "MTG-0902",
+   "title": "Eng sync",
+   "date": "2026-09-02",
+   "attendees": [
+    "jonas",
+    "tom",
+    "priya"
+   ],
+   "summary": "Decided exponential backoff for sync retries (base 2s, max 5). Priya owns the spec.",
+   "transcript": [
+    {
+     "speaker": "jonas",
+     "text": "Fixed 3 retries is not enough. Let's do exponential backoff."
+    },
+    {
+     "speaker": "tom",
+     "text": "Base 2 seconds, cap at 5 retries?"
+    },
+    {
+     "speaker": "jonas",
+     "text": "Agreed, max 5 retries. Priya, can you write the spec?"
+    },
+    {
+     "speaker": "priya",
+     "text": "Yes, I'll put Sync Retry Policy v2 in Notion."
+    }
+   ]
+  },
+  {
+   "id": "MTG-0916",
+   "title": "Eng sync",
+   "date": "2026-09-16",
+   "attendees": [
+    "jonas",
+    "tom",
+    "lea"
+   ],
+   "summary": "Brightwave hit rate limits; max retries reduced to 4 with jitter. Ticket/spec to be updated.",
+   "transcript": [
+    {
+     "speaker": "lea",
+     "text": "Brightwave is hitting rate limits during retry storms."
+    },
+    {
+     "speaker": "jonas",
+     "text": "Then we go to max 4 retries and add jitter. That's the decision."
+    },
+    {
+     "speaker": "tom",
+     "text": "I'll change the code; ticket and spec still say 5, someone should update them."
+    }
+   ]
+  },
+  {
+   "id": "MTG-0923",
+   "title": "Launch review",
+   "date": "2026-09-23",
+   "attendees": [
+    "maya",
+    "priya",
+    "jonas"
+   ],
+   "summary": "Webhooks GA moved from Oct 15 to Nov 5; signature verification (LIN-151) not started.",
+   "transcript": [
+    {
+     "speaker": "priya",
+     "text": "Signature verification hasn't started, Oct 15 is not realistic."
+    },
+    {
+     "speaker": "maya",
+     "text": "Then GA is November 5th. Priya, please communicate."
+    }
+   ]
+  }
+ ]
+}

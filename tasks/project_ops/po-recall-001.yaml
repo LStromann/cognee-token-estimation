@@ -1,0 +1,9 @@
+id: po-recall-001
+topic: project_ops
+type: recall
+hops: 1
+needs: [memory, mcp]
+turns:
+  - "Who owns the sync retry policy spec, and which Linear project does the backoff ticket belong to?"
+gold: "Priya Nair owns 'Sync Retry Policy v2' (Notion); LIN-142 is in the 'Sync Reliability' project."
+grader: {kind: llm_judge, rubric: "Pass if it names Priya as owner AND Sync Reliability as project."}

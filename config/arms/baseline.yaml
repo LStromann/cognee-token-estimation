@@ -1,0 +1,3 @@
+mcp_servers: [linear, granola, notion, slack, github]
+settings: config/settings/baseline.json
+extra_mcp: {}

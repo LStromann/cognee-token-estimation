@@ -1,0 +1,9 @@
+id: po-temp-001
+topic: project_ops
+type: temporal
+hops: 2
+needs: [memory, mcp]
+turns:
+  - "What's the current launch date for Webhooks GA?"
+gold: "Nov 5 (moved from Oct 15 in the 2026-09-23 launch review). The Notion launch plan is stale and still says Oct 15."
+grader: {kind: llm_judge, rubric: "Pass if the answer is Nov 5. Fail if Oct 15 is given as current."}

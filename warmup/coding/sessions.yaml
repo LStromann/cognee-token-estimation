@@ -1,0 +1,6 @@
+topic: coding
+sessions:
+  - id: w1
+    turns: ["Give me a tour of this repo: main modules, how sync works, where retries happen."]  # TODO adapt to pinned repo
+  - id: w2
+    turns: ["Look at PR #91 and LIN-142. How does the change fit into the codebase?"]

@@ -1,0 +1,27 @@
+{
+ "issues": [
+  {
+   "number": 88,
+   "title": "Duplicate records on retry",
+   "state": "open",
+   "labels": [
+    "bug"
+   ],
+   "body": "Customer Brightwave sees duplicates after failed sync. Linear: LIN-155.",
+   "comments": []
+  }
+ ],
+ "pulls": [
+  {
+   "number": 91,
+   "title": "Exponential backoff for sync retries",
+   "state": "open",
+   "body": "Implements LIN-142. max_retries=5 per spec.",
+   "files": [
+    "sync/retry.py",
+    "tests/test_retry.py"
+   ],
+   "comments": []
+  }
+ ]
+}
