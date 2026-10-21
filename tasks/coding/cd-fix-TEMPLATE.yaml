@@ -1,0 +1,12 @@
+id: cd-fix-TEMPLATE
+topic: coding
+type: code_fix
+hops: 3
+needs: [memory, mcp, code]
+turns:
+  - "Fix the Brightwave duplicate-records bug. Follow what the team decided about retries."
+gold: "Idempotent retries + max 4 retries with jitter."
+grader:
+  kind: tests
+  hidden_tests: tasks/coding/hidden/cd-fix-001
+  command: "pytest -q tests/hidden"

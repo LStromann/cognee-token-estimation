@@ -1,0 +1,9 @@
+id: cd-qa-TEMPLATE
+topic: coding
+type: codebase_qa
+hops: 2
+needs: [memory, code]
+turns:
+  - "Where is <feature> configured and which modules call it?"
+gold: "<path/to/file.py:function>, called from <a>, <b>"
+grader: {kind: llm_judge, rubric: "Pass if it names the config location and at least the two main callers."}

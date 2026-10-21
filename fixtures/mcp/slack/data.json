@@ -1,0 +1,43 @@
+{
+ "channels": [
+  {
+   "id": "C01",
+   "name": "eng"
+  },
+  {
+   "id": "C02",
+   "name": "launch"
+  },
+  {
+   "id": "C03",
+   "name": "support"
+  }
+ ],
+ "messages": [
+  {
+   "channel": "C03",
+   "ts": "1757670000.000100",
+   "user": "lea",
+   "text": "Brightwave reports duplicate records after a failed sync. Filed LIN-155."
+  },
+  {
+   "channel": "C01",
+   "ts": "1758020000.000100",
+   "user": "jonas",
+   "text": "Confirmed: sync retries now max 4 with jitter (Brightwave rate limits)."
+  },
+  {
+   "channel": "C01",
+   "ts": "1758020100.000200",
+   "thread_ts": "1758020000.000100",
+   "user": "tom",
+   "text": "Will change the code; haven't touched LIN-142 or the spec."
+  },
+  {
+   "channel": "C02",
+   "ts": "1758630000.000100",
+   "user": "priya",
+   "text": "Webhooks GA is now Nov 5. I'll update the launch plan later."
+  }
+ ]
+}

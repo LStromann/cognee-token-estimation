@@ -1,0 +1,81 @@
+name: cognee-token-bench-v1
+
+# ---- Models (all adjustable) ----
+models:                     # agent models; the run matrix covers each one (override: --models a,b)
+  - claude-opus-5-5
+judge_model: claude-sonnet-5-5   # fixed for ALL runs, so grading doesn't vary with the agent model
+warmup_model: claude-opus-5-5    # fixed, so both arms build memory from identical sessions
+
+# ---- Design ----
+arms: [baseline, cognee]
+topics: [coding, project_ops, meetings]
+repetitions: 3              # set from pilot variance
+seed: 42                    # arm order is shuffled per (task, rep)
+pilot:
+  tasks_per_topic: 5        # first N tasks per topic (sorted by id)
+  repetitions: 2
+
+warmup:
+  memory_prompting: natural # natural | explicit
+  explicit_suffix: " Keep anything important for future sessions."
+
+# ---- Runtime ----
+work_dir: /tmp/ctb          # active slots + snapshots live here
+claude:
+  binary: claude
+  expected_version: ""      # e.g. "2.3.1"; runner warns on mismatch
+  permission_mode: bypassPermissions
+  max_turns: 40
+  timeout_s: 1200
+
+coding_repo:                # real repo for the coding topic
+  url: ""                   # TODO e.g. https://github.com/<org>/<repo>.git
+  commit: ""                # TODO pinned sha
+
+# ---- Token accounting (exact, one proxy, one port; see docs/token-measurement.md) ----
+tokens:
+  proxy_host: 127.0.0.1
+  port: 8787
+  upstream: https://api.anthropic.com          # Claude Code AND Cognee's LLM (Claude) go here
+  routes:                                      # path prefix on the same port -> source tag
+    /cognee: {source: cognee}                  # Cognee's LLM calls (Claude) -> counted like Claude
+    # /cognee_embed: {source: cognee_embed, upstream: https://api.openai.com}  # only if not using local embeddings
+  net_sources: [cognee]                        # Cognee sources included in net_delta (same tokenizer as Claude)
+  direct_base_url: https://api.anthropic.com   # judge + count_tokens go here directly (never counted)
+  cognee_tool_prefix: "mcp__cognee__"          # tool results/defs from these tools = Cognee context
+  keep_request_bodies: false                   # bodies are deleted after attribution (they get large)
+  crosscheck_tolerance: 0.01                   # flag runs where proxy vs stream-json differ by >1%
+  weights:                                     # relative cost per token (input = 1) for the cost view
+    input_tokens: 1.0
+    cache_creation_input_tokens: 1.25
+    cache_read_input_tokens: 0.1
+    output_tokens: 5.0
+
+# Cognee lifecycle hooks (shell). Placeholders: {arm} {topic} {snapshot} {workspace} {proxy} {proxy_cognee}
+cognee:
+  dataset: "ctb_{topic}"
+  proxy_env:                       # TODO: verify Cognee's env names
+    LLM_PROVIDER: anthropic        # Cognee uses Claude -> same tokenizer, same port
+    LLM_MODEL: claude-sonnet-5-5   # pin Cognee's model
+    LLM_ENDPOINT: "{proxy_cognee}"
+    EMBEDDING_PROVIDER: fastembed  # local embeddings -> no API tokens (TODO verify)
+  # The Cognee plugin's REAL hook commands. The harness wraps each one in harness/hooks/tee_hook.py,
+  # which passes everything through unchanged and logs what was injected (nothing added to the context).
+  hook_log:                        # Option A: read the Cognee plugin's own hook log (set path to enable)
+    path: ""                       # e.g. "{workspace}/.cognee/hook.log"  (placeholders: {workspace} {config_dir} {home})
+    text_field: ""                 # jsonl field with the injected text; "" = whole line is the text
+  # Option B (when hook_log.path is empty): hooks are wrapped in harness/hooks/tee_hook.py, which logs for us.
+  hooks: []                        # TODO e.g.
+    # - {event: SessionStart,     command: "<cognee plugin session-start hook>"}
+    # - {event: UserPromptSubmit, command: "<cognee plugin prompt hook>"}
+    # - {event: PostToolUse,      command: "<cognee plugin post-tool hook>", matcher: "Edit|Write"}
+  reset_cmd: ""             # TODO wipe dataset before warm-up
+  after_warmup_cmd: ""      # TODO optional explicit ingest/cognify after warm-up
+  snapshot_cmd: ""          # TODO export dataset into {snapshot}/cognee
+  restore_cmd: ""           # TODO restore dataset from {snapshot}/cognee
+
+# ---- Sizing plan (validated by `make validate`) ----
+sizing:
+  coding:      {codebase_qa: 15, code_fix: 10, cross_source: 8, recall: 5, temporal: 4, control: 5, multi_turn: 3}
+  project_ops: {recall: 10, cross_source: 12, temporal: 8, action: 8, control: 6, multi_turn: 6}
+  meetings:    {recall: 10, cross_source: 12, temporal: 10, action: 6, control: 6, multi_turn: 6}

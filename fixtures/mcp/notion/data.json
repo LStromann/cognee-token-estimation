@@ -1,0 +1,25 @@
+{
+ "pages": [
+  {
+   "id": "NP-1",
+   "title": "Sync Retry Policy v2",
+   "owner": "priya",
+   "last_edited": "2026-09-03",
+   "content": "Policy: exponential backoff, base 2s, max 5 retries. Decision: eng sync 2026-09-02."
+  },
+  {
+   "id": "NP-2",
+   "title": "Webhooks GA Launch Plan",
+   "owner": "priya",
+   "last_edited": "2026-09-10",
+   "content": "Launch date: Oct 15. Scope: delivery retries, signature verification (LIN-151), docs (LIN-160)."
+  },
+  {
+   "id": "NP-3",
+   "title": "Onboarding Checklist",
+   "owner": "lea",
+   "last_edited": "2026-08-20",
+   "content": "1. Create workspace. 2. Connect first source. 3. Configure sync schedule. 4. Invite teammates. 5. Set up alerts."
+  }
+ ]
+}

@@ -1,0 +1,8 @@
+topic: meetings
+sessions:
+  - id: w1
+    turns: ["Summarise my September meetings with decisions and owners."]
+  - id: w2
+    turns: ["What did the launch review on Sep 23 decide and who has follow-ups?"]
+  - id: w3
+    turns: ["Go through the Sep 16 eng sync transcript. Anything that contradicts our Notion docs?"]
