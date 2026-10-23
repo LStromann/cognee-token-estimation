@@ -20,7 +20,11 @@ def sources(cfg):
 
 
 def start(cfg, out_dir):
-    p = subprocess.Popen([sys.executable, "-m", "harness.proxy", "--out", str(out_dir)], cwd=ROOT)
+    t = cfg["tokens"]
+    p = subprocess.Popen(
+        [sys.executable, "-m", "harness.proxy", "--out", str(out_dir),
+         "--host", str(t["proxy_host"]), "--port", str(t["port"]), "--upstream", str(t["upstream"])],
+        cwd=ROOT)
     for _ in range(100):
         try:
             urllib.request.urlopen(_base(cfg) + "/_ctb/health", timeout=1)

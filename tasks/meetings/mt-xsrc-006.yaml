@@ -1,0 +1,16 @@
+id: mt-xsrc-006
+topic: meetings
+type: cross_source
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- Does the security page match the security-tools meeting?
+gold: No. NP-8 still says evaluating Drata. MTG-0908 chose Vanta.
+sources:
+- NP-8
+- MTG-0908
+grader:
+  kind: llm_judge
+  rubric: Pass if Vanta is chosen and the page is stale.

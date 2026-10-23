@@ -1,0 +1,18 @@
+id: po-xsrc-006
+topic: project_ops
+type: cross_source
+hops: 3
+needs:
+- memory
+- mcp
+turns:
+- Is the Brightwave renewal notice in the MSA summary the one counsel agreed to?
+gold: No. NP-6 says 60 days and omits subprocessors. The agreement is 90 days renewal and 30 days subprocessor
+  notice. The cap of 12 months of fees did not change.
+sources:
+- NP-6
+- MTG-0919
+- C07
+grader:
+  kind: llm_judge
+  rubric: Pass if renewal is 90 days, subprocessors are 30 days, and the cap is unchanged.

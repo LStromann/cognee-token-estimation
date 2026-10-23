@@ -1,0 +1,14 @@
+id: cd-ctrl-004
+topic: coding
+type: control
+hops: 1
+needs:
+- mcp
+turns:
+- What is the title of Linear ticket LIN-160, and what state is it in?
+gold: 'Title: Update onboarding docs for webhooks. State: Backlog. Assignee priya.'
+sources:
+- named
+grader:
+  kind: llm_judge
+  rubric: Pass if the title and the Backlog state are both correct.

@@ -1,0 +1,15 @@
+id: mt-recall-002
+topic: meetings
+type: recall
+hops: 1
+needs:
+- memory
+- mcp
+turns:
+- Who was in the Webhooks launch review, and who announced the new GA date?
+gold: Attendees were maya, priya, and jonas. Maya announced GA on Nov 5.
+sources:
+- MTG-0923
+grader:
+  kind: llm_judge
+  rubric: Pass if Maya is the one who set the date and the three attendees are right.

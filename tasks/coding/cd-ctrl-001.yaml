@@ -1,0 +1,15 @@
+id: cd-ctrl-001
+topic: coding
+type: control
+hops: 1
+needs:
+- skill
+turns:
+- Using the release-notes skill in this workspace, what section headings does a customer note use, and
+  are ticket ids allowed?
+gold: 'Sections: New, Improved, Fixed. Customer language, no ticket ids.'
+sources:
+- named
+grader:
+  kind: llm_judge
+  rubric: Pass if those three headings are named and ticket ids are excluded.

@@ -1,0 +1,18 @@
+id: cd-temp-004
+topic: coding
+type: temporal
+hops: 2
+needs:
+- memory
+- mcp
+- code
+turns:
+- Should the idempotency key change on each retry attempt?
+gold: 'No. MTG-0916 requires a stable Idempotency-Key on POST /sync. The code includes the attempt, which
+  is what duplicated Brightwave''s records (LIN-155, GitHub #88, PR #110).'
+sources:
+- overlay
+- meetings
+grader:
+  kind: llm_judge
+  rubric: Pass if the key must stay stable across attempts. Fail if a per-attempt key is recommended.

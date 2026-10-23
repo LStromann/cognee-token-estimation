@@ -1,0 +1,18 @@
+id: po-xsrc-002
+topic: project_ops
+type: cross_source
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- Does the backoff ticket still match the latest retry decision? Cite the disagreement.
+gold: No. LIN-142 still says base 2s and max 5 from 2026-09-02. The current decision is max 4 with jitter,
+  base still 2s.
+sources:
+- LIN-142
+- MTG-0916
+grader:
+  kind: llm_judge
+  rubric: Pass if LIN-142 is called stale and the current cap is 4 with jitter. Fail if it says the ticket
+    is already updated.

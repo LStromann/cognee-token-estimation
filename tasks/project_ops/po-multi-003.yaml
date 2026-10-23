@@ -1,0 +1,16 @@
+id: po-multi-003
+topic: project_ops
+type: multi_turn
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- What is Northwind's current price and connector count?
+- 'Draft a #product Slack message announcing it. Don''t send it. Mention who approved.'
+gold: $3100/mo, 5 connectors, approved by Maya.
+sources:
+- story
+grader:
+  kind: llm_judge
+  rubric: Judge the final turn. Pass if the draft has $3100, 5 connectors, and Maya.

@@ -1,0 +1,15 @@
+id: cd-qa-004
+topic: coding
+type: codebase_qa
+hops: 1
+needs:
+- code
+turns:
+- When does stop_after_attempt stop, and where is it defined?
+gold: tenacity/stop.py. stop_after_attempt(max_attempt_number) returns True when retry_state.attempt_number
+  >= max_attempt_number.
+sources:
+- tenacity
+grader:
+  kind: llm_judge
+  rubric: Pass if the file is tenacity/stop.py and the condition is attempt_number >= max_attempt_number.

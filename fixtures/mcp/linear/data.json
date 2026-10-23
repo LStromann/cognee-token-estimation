@@ -24,6 +24,21 @@
    "id": "lea",
    "name": "Lea Fischer",
    "role": "Support Lead"
+  },
+  {
+   "id": "nora",
+   "name": "Nora Berg",
+   "role": "Legal"
+  },
+  {
+   "id": "samir",
+   "name": "Samir Haddad",
+   "role": "Infra"
+  },
+  {
+   "id": "hana",
+   "name": "Hana Ito",
+   "role": "Design"
   }
  ],
  "projects": [
@@ -38,6 +53,18 @@
    "name": "Webhooks GA",
    "lead": "priya",
    "description": "Ship webhooks to general availability."
+  },
+  {
+   "id": "PRJ-3",
+   "name": "Infra Redesign",
+   "lead": "samir",
+   "description": "Move production onto AWS with a warm standby."
+  },
+  {
+   "id": "PRJ-4",
+   "name": "Brightwave Renewal",
+   "lead": "nora",
+   "description": "Close the Brightwave MSA redlines."
   }
  ],
  "issues": [
@@ -54,6 +81,18 @@
    "description": "Per 2026-09-02 eng sync: exponential backoff, base 2s, max 5 retries. Spec: Notion 'Sync Retry Policy v2'."
   },
   {
+   "id": "LIN-149",
+   "title": "Cap sync retries at 3",
+   "state": "Cancelled",
+   "assignee": "tom",
+   "project": "Sync Reliability",
+   "labels": [
+    "backend"
+   ],
+   "updated": "2026-09-16",
+   "description": "Proposal to cap at 3. Not adopted."
+  },
+  {
    "id": "LIN-151",
    "title": "Webhooks GA: signature verification",
    "state": "Todo",
@@ -64,7 +103,7 @@
     "security"
    ],
    "updated": "2026-09-10",
-   "description": "HMAC-SHA256 signatures on all webhook payloads."
+   "description": "HMAC-SHA256 signatures on all webhook payloads. Header: X-Hub-Signature."
   },
   {
    "id": "LIN-155",
@@ -76,8 +115,20 @@
     "customer",
     "bug"
    ],
-   "updated": "2026-09-12",
-   "description": "Reported by Lea. Duplicates appear after a failed sync is retried. GitHub #88."
+   "updated": "2026-09-14",
+   "description": "Reported by Lea. Duplicates appear after a failed sync is retried. GitHub #88. Suspected cause: retries are not idempotent."
+  },
+  {
+   "id": "LIN-158",
+   "title": "Webhooks private beta",
+   "state": "Done",
+   "assignee": "priya",
+   "project": "Webhooks GA",
+   "labels": [
+    "launch"
+   ],
+   "updated": "2026-09-01",
+   "description": "Private beta opened Oct 1 for two design partners. This is not the GA date."
   },
   {
    "id": "LIN-160",
@@ -89,7 +140,91 @@
     "docs"
    ],
    "updated": "2026-09-11",
-   "description": ""
+   "description": "Docs follow the launch plan date."
+  },
+  {
+   "id": "LIN-162",
+   "title": "Pick a SOC 2 tool",
+   "state": "In Progress",
+   "assignee": "samir",
+   "project": "Infra Redesign",
+   "labels": [
+    "security"
+   ],
+   "updated": "2026-09-02",
+   "description": "Evaluate Drata."
+  },
+  {
+   "id": "LIN-168",
+   "title": "Update Northwind order form",
+   "state": "Todo",
+   "assignee": "priya",
+   "project": "Brightwave Renewal",
+   "labels": [
+    "customer"
+   ],
+   "updated": "2026-09-05",
+   "description": "Paper the pilot at $2400/mo for 3 connectors."
+  },
+  {
+   "id": "LIN-170",
+   "title": "Terraform active-active regions",
+   "state": "In Progress",
+   "assignee": "samir",
+   "project": "Infra Redesign",
+   "labels": [
+    "infra"
+   ],
+   "updated": "2026-09-09",
+   "description": "Implement active-active multi-region writes. GitHub PR 102."
+  },
+  {
+   "id": "LIN-176",
+   "title": "Brightwave MSA redlines",
+   "state": "In Progress",
+   "assignee": "nora",
+   "project": "Brightwave Renewal",
+   "labels": [
+    "legal"
+   ],
+   "updated": "2026-09-12",
+   "description": "Send the draft with a 60-day renewal notice. Cap stays 12 months of fees."
+  },
+  {
+   "id": "LIN-180",
+   "title": "webhooks_v2 flag default",
+   "state": "Todo",
+   "assignee": "tom",
+   "project": "Webhooks GA",
+   "labels": [
+    "backend"
+   ],
+   "updated": "2026-09-10",
+   "description": "Flag webhooks_v2 owner tom, default off until Oct 15."
+  },
+  {
+   "id": "LIN-183",
+   "title": "Move Redis off Render this week",
+   "state": "Todo",
+   "assignee": "samir",
+   "project": "Infra Redesign",
+   "labels": [
+    "infra"
+   ],
+   "updated": "2026-09-09",
+   "description": "Cut Redis over immediately, in the same window as the region move."
+  },
+  {
+   "id": "LIN-190",
+   "title": "Backend offer: Rina Sol",
+   "state": "In Progress",
+   "assignee": "priya",
+   "project": "Sync Reliability",
+   "labels": [
+    "hiring"
+   ],
+   "updated": "2026-09-07",
+   "description": "Rina Sol accepted the offer. Schedule a start date."
   }
  ],
  "comments": [
@@ -97,6 +232,16 @@
    "issueId": "LIN-155",
    "author": "jonas",
    "body": "Likely retries are not idempotent. Will look after LIN-142."
+  },
+  {
+   "issueId": "LIN-149",
+   "author": "jonas",
+   "body": "Rejected on 2026-09-16. We did not adopt a cap of 3."
+  },
+  {
+   "issueId": "LIN-158",
+   "author": "priya",
+   "body": "Beta date only. Do not quote this as GA."
   }
  ]
 }

@@ -1,0 +1,16 @@
+id: cd-qa-003
+topic: coding
+type: codebase_qa
+hops: 2
+needs:
+- code
+turns:
+- How is wait_exponential_jitter different from wait_exponential, and what happened to the initial parameter?
+gold: wait_exponential_jitter in tenacity/wait.py adds random.uniform(0, jitter) on top of multiplier
+  * exp_base**(attempt-1), then clamps to min/max. The initial parameter is deprecated in favor of multiplier;
+  passing both raises ValueError.
+sources:
+- tenacity
+grader:
+  kind: llm_judge
+  rubric: Pass if it describes the added jitter term and the deprecation of initial.

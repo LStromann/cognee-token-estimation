@@ -4,22 +4,29 @@
   python -m harness.run --phase eval [--pilot] [--models claude-opus-5-5,claude-sonnet-5-5]
                         [--reps 3] [--tasks po-xsrc-001,mt-*]
 """
-import argparse, datetime, fnmatch, json, random, shutil, time
+import argparse, datetime, fnmatch, json, os, pathlib, random, shutil, time
 
 from harness import env, proxy_ctl, tokens
 from harness.claude_runner import claude_version, merge, run_turn
 from harness.config import ROOT, load_config, load_tasks, load_warmup
-from harness.graders import grade
+from harness.graders import grade, secondary_judge
+from harness.graph_wait import wait_for_graph
 
 
-def run_session(turns, *, model, slot, arm, topic, cfg, fmt, log_prefix):
+def run_session(turns, *, model, slot, arm, topic, cfg, fmt, log_prefix, task=None, phase="eval"):
     mock_log = slot / f"{log_prefix}.mock.jsonl"
+    fmt = env.enrich_fmt(cfg, fmt, arm=arm, topic=topic, workspace=slot / "workspace")
     mcp_cfg, settings = env.write_mcp_config(cfg, arm, topic, slot, mock_log, fmt)
+    extra = env.run_env(cfg, arm, slot, fmt, log_prefix)
+    extra["CTB_PHASE"] = phase
+    if task is not None and cfg.get("_dry_run"):
+        extra["CTB_TASK_FILE"] = str(ROOT / task["_file"])
     out, session = [], None
-    for prompt in turns:
+    for i, prompt in enumerate(turns):
+        extra["CTB_TURN_INDEX"] = str(i)
         m = run_turn(prompt, model=model, slot=slot, mcp_config=mcp_cfg, settings=settings,
                      ccfg=cfg["claude"], resume=session, raw_log=slot / f"{log_prefix}.stream.jsonl",
-                     extra_env=env.run_env(cfg, arm, slot, fmt, log_prefix))
+                     extra_env=extra)
         session = session or m.get("session_id")
         out.append(m)
     return merge(out), mock_log
@@ -39,11 +46,17 @@ def warmup(cfg, arms, topics, out_dir, fmt):
             for s in load_warmup(topic):
                 proxy_ctl.set_context(cfg, run_id=prefix + s["id"], phase="warmup", arm=arm, topic=topic)
                 run_session([t + suffix for t in s["turns"]], model=cfg["warmup_model"], slot=slot, arm=arm,
-                            topic=topic, cfg=cfg, fmt=fmt, log_prefix=f"warmup-{s['id']}")
+                            topic=topic, cfg=cfg, fmt=fmt, log_prefix=f"warmup-{s['id']}", phase="warmup")
+                # Cognify runs after the session returns. Do not start the next session
+                # until the graph is idle or completed, or a partial graph leaks forward.
+                if arm == "cognee":
+                    st = wait_for_graph(cfg, fmt, arm=arm, topic=topic, workspace=slot / "workspace")
+                    print(f"[warmup] {arm}/{topic} {s['id']} graph ready ({st['status']})")
             if arm == "cognee":
                 proxy_ctl.set_context(cfg, run_id=prefix + "ingest", phase="warmup", arm=arm, topic=topic)
-                env.sh(cfg["cognee"]["after_warmup_cmd"], cfg, fmt, arm=arm, topic=topic, snapshot="",
-                       workspace=slot / "workspace")
+                st = wait_for_graph(cfg, fmt, arm=arm, topic=topic, workspace=slot / "workspace",
+                                    kick="after_warmup_cmd")
+                print(f"[warmup] {arm}/{topic} final graph ready ({st['status']})")
             proxy_ctl.set_context(cfg, run_id=prefix + "snapshot", phase="warmup", arm=arm, topic=topic)
             bk = tokens.buckets(tokens.load(out_dir / "proxy.jsonl"), prefix=prefix)
             ingest.setdefault(topic, {})[arm] = bk  # Cognee's ingestion cost = cognee_* buckets here
@@ -84,9 +97,12 @@ def evaluate(cfg, models, tasks, reps, out_dir, fmt):
                     plog_offset = plog.stat().st_size if plog and plog.exists() else 0  # log may be shared/appended
                     proxy_ctl.set_context(cfg, run_id=run_id, phase="eval", arm=arm, topic=task["topic"])
                     m, mock_log = run_session(task["turns"], model=model, slot=slot, arm=arm, topic=task["topic"],
-                                              cfg=cfg, fmt=fmt, log_prefix="eval")
+                                              cfg=cfg, fmt=fmt, log_prefix="eval", task=task, phase="eval")
                     proxy_ctl.set_context(cfg, run_id=run_id + "__post", phase="post", arm=arm, topic=task["topic"])
                     g = grade(task, m["answer"], slot, cfg["judge_model"], tcfg["direct_base_url"])
+                    sec = secondary_judge(task, m["answer"], cfg.get("secondary_judge") or {}, tcfg["direct_base_url"])
+                    disagree = bool(sec and not sec.get("error") and sec.get("success") is not None
+                                    and bool(sec["success"]) != bool(g["success"]))
 
                     # ---- exact token accounting ----
                     records = tokens.load(out_dir / "proxy.jsonl")
@@ -118,9 +134,28 @@ def evaluate(cfg, models, tasks, reps, out_dir, fmt):
                            "token_crosscheck_diff": round(diff, 4),
                            "token_crosscheck_flag": diff > tcfg["crosscheck_tolerance"],
                            **g, "mock_calls": len(mock_calls),
-                           "mock_response_chars": sum(c["response_chars"] for c in mock_calls)}
+                           "mock_response_chars": sum(c["response_chars"] for c in mock_calls),
+                           "dry_run": bool(cfg.get("_dry_run")),
+                           "secondary_success": None if not sec else sec.get("success"),
+                           "secondary_reason": "" if not sec else (sec.get("reason") or ""),
+                           "secondary_error": "" if not sec else (sec.get("error") or ""),
+                           "judge_disagreement": disagree}
                     with open(runs_file, "a") as fh:
                         fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
+
+
+def require_plugin_root(cfg):
+    """The Claude plugin's script directory is machine-specific. One config slot."""
+    if cfg.get("_dry_run") or "cognee" not in cfg["arms"]:
+        return
+    root = str((cfg.get("cognee") or {}).get("plugin_root") or "").strip()
+    scripts = pathlib.Path(root) / "scripts" if root else None
+    if not scripts or not scripts.is_dir():
+        raise SystemExit(
+            "cognee.plugin_root is empty or has no scripts/ directory. Set it to the installed "
+            "Cognee Claude Code plugin (integrations/claude-code from topoteretes/cognee-integrations). "
+            "That is the one manual path. Offline pipeline: make pilot-dry."
+        )
 
 
 def main():
@@ -130,7 +165,17 @@ def main():
     ap.add_argument("--models"); ap.add_argument("--arms"); ap.add_argument("--topics")
     ap.add_argument("--tasks", help="comma-separated ids or globs")
     ap.add_argument("--reps", type=int); ap.add_argument("--pilot", action="store_true")
+    ap.add_argument("--dry-run", action="store_true", help="fake LLM behind the proxy; no API key")
     a = ap.parse_args()
+    dry = a.dry_run or os.environ.get("CTB_DRY_RUN") == "1"
+    fake = None
+    if dry:
+        from harness.fake_upstream import serve_background
+        from harness.dryrun import apply
+        _proc, fake_url = serve_background()
+        fake = _proc
+        apply(cfg, fake_base_url=fake_url)
+    require_plugin_root(cfg)
     split = lambda s: [x.strip() for x in s.split(",")] if s else None
     arms = split(a.arms) or cfg["arms"]
     topics = split(a.topics) or cfg["topics"]
@@ -150,6 +195,12 @@ def main():
         evaluate(cfg, split(a.models) or cfg["models"], tasks, reps, out_dir, fmt)
     finally:
         proxy_ctl.stop(proxy)
+        if fake is not None:
+            fake.terminate()
+            try:
+                fake.wait(5)
+            except Exception:
+                fake.kill()
 
 
 if __name__ == "__main__":

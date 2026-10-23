@@ -1,0 +1,15 @@
+id: po-ctrl-006
+topic: project_ops
+type: control
+hops: 1
+needs:
+- mcp
+turns:
+- List the four steps on the Notion Release Checklist, in order.
+gold: '1. Feature flag default reviewed. 2. Docs page updated. 3. Support macro ready. 4. Launch-review
+  note posted in #launch.'
+sources:
+- named page
+grader:
+  kind: llm_judge
+  rubric: Pass if all four steps are present in that order.

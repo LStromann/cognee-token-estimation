@@ -1,0 +1,14 @@
+id: mt-ctrl-005
+topic: meetings
+type: control
+hops: 1
+needs:
+- mcp
+turns:
+- From the Glossary page, what is a sync run?
+gold: One pass over a connector.
+sources:
+- named source
+grader:
+  kind: llm_judge
+  rubric: Pass if the answer matches that definition.

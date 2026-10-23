@@ -1,0 +1,16 @@
+id: mt-recall-006
+topic: meetings
+type: recall
+hops: 1
+needs:
+- memory
+- mcp
+turns:
+- When was INC-19, what severity was it, and which customer was affected?
+gold: '2026-09-14, SEV-2, customer Brightwave. Cause discussed on the bridge: retry storm.'
+sources:
+- MTG-0914
+- NP-12
+grader:
+  kind: llm_judge
+  rubric: Pass if the date, SEV-2, and Brightwave are all present.

@@ -120,8 +120,20 @@ def load_hook_log(path, text_field="text", offset=0):
     return texts
 
 
+def cognee_prefixes(tcfg):
+    prefixes = list(tcfg.get("cognee_tool_prefixes") or [])
+    single = tcfg.get("cognee_tool_prefix")
+    if single and single not in prefixes:
+        prefixes.insert(0, single)
+    return prefixes
+
+
+def _cognee_named(name, prefixes):
+    return any(str(name).startswith(p) for p in prefixes)
+
+
 def cognee_attribution(records, run_id, out_dir, tcfg, counter, hook_texts=()):
-    prefix = tcfg["cognee_tool_prefix"]
+    prefixes = cognee_prefixes(tcfg)
     reqs = sorted((r for r in records if r["run_id"] == run_id and r["source"] == "claude"
                    and r.get("body_file") and _gen(r)), key=lambda r: r["n"])
     seen, ctx_first, ctx_resent, n_carry, per_req = {}, 0, 0, 0, []
@@ -141,7 +153,7 @@ def cognee_attribution(records, run_id, out_dir, tcfg, counter, hook_texts=()):
                 if t == "tool_use":
                     names[b["id"]] = b.get("name", "")
                 elif t == "tool_result":
-                    if names.get(b.get("tool_use_id"), "").startswith(prefix):
+                    if _cognee_named(names.get(b.get("tool_use_id"), ""), prefixes):
                         blocks[("tool", b["tool_use_id"])] = _text(b.get("content"))
                     else:
                         haystack.append(_text(b.get("content")))
@@ -163,7 +175,7 @@ def cognee_attribution(records, run_id, out_dir, tcfg, counter, hook_texts=()):
         n_carry += int(bool(blocks))
         # Cognee tool definitions in this request (fixed overhead)
         tools = body.get("tools") or []
-        cnames = {t.get("name") for t in tools if str(t.get("name", "")).startswith(prefix)}
+        cnames = {t.get("name") for t in tools if _cognee_named(t.get("name", ""), prefixes)}
         tdef = counter.tool_tokens(model, tools, cnames) if cnames else 0
         if tdef:
             if tool_seen_once:

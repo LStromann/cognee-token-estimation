@@ -1,0 +1,20 @@
+id: cd-fix-006
+topic: coding
+type: code_fix
+hops: 3
+needs:
+- memory
+- mcp
+- code
+turns:
+- 'Update policy() in tidepool_sync/retry_policy.py so the returned dict matches every current decision:
+  max 4, jitter on, base delay 2, Idempotency-Key, X-Tidepool-Signature, backoff ''exponential+jitter'',
+  decision source MTG-0916.'
+gold: policy() returns that bundle.
+sources:
+- MTG-0916
+- MTG-0923
+grader:
+  kind: tests
+  hidden_tests: tasks/coding/hidden/cd-fix-006
+  command: python3 -m pytest -q tests/hidden --rootdir=. --override-ini=pythonpath=. -p no:cacheprovider

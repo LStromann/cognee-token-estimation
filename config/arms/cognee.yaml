@@ -1,8 +1,13 @@
 mcp_servers: [linear, granola, notion, slack, github]
 settings: config/settings/cognee.json
 extra_mcp:
-  cognee:                    # TODO: real Cognee MCP launch command
-    command: cognee-mcp
-    args: []
+  # Standalone Cognee MCP (uvx cognee-mcp@latest, stdio). The Claude plugin's
+  # own tools are mcp__cognee-memory__* and are registered by the hooks above.
+  # Both are enabled; see the README for the double-injection note.
+  # proxy_env (including ANTHROPIC_BASE_URL={proxy_cognee}) is merged onto this
+  # server only. Claude Code itself stays on the unprefixed proxy.
+  cognee:
+    command: uvx
+    args: ["cognee-mcp@latest"]
     env:
-      COGNEE_DATASET: "ctb_{topic}"
+      COGNEE_PLUGIN_DATASET: "ctb_{topic}"

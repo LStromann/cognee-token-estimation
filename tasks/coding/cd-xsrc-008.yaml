@@ -1,0 +1,17 @@
+id: cd-xsrc-008
+topic: coding
+type: cross_source
+hops: 3
+needs:
+- memory
+- mcp
+- code
+turns:
+- 'Jonas confirmed a retry change in #eng. What does the overlay''s USE_JITTER and MAX_ATTEMPTS say instead?'
+gold: '#eng says max 4 with jitter. The overlay has USE_JITTER False and MAX_ATTEMPTS 5.'
+sources:
+- overlay
+- mcp
+grader:
+  kind: llm_judge
+  rubric: Pass if the Slack decision is 4 with jitter and the code values are the old ones.

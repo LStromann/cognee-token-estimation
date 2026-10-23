@@ -1,0 +1,18 @@
+id: po-xsrc-010
+topic: project_ops
+type: cross_source
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- Is the on-call page someone could page from, or is it out of date?
+gold: Out of date. NP-9 says Jonas is primary all week. The rotation is tom on weekdays, samir on weekends,
+  escalate to jonas.
+sources:
+- NP-9
+- MTG-0912
+- C01
+grader:
+  kind: llm_judge
+  rubric: Pass if the page is stale and all three current roles are right.

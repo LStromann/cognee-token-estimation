@@ -2,8 +2,15 @@ id: mt-recall-001
 topic: meetings
 type: recall
 hops: 1
-needs: [memory, mcp]
+needs:
+- memory
+- mcp
 turns:
-  - "What did we originally decide about sync retries, and when?"
-gold: "Eng sync 2026-09-02: exponential backoff, base 2s, max 5 retries (later changed to 4 + jitter on 2026-09-16)."
-grader: {kind: llm_judge, rubric: "Pass if it gives 2026-09-02 and exponential backoff with base 2s and max 5."}
+- What did we originally decide about sync retries, and when?
+gold: 'Eng sync 2026-09-02 (MTG-0902): exponential backoff, base 2s, max 5 retries, no jitter. Priya took
+  the spec. This was later changed.'
+sources:
+- MTG-0902
+grader:
+  kind: llm_judge
+  rubric: Pass if it gives 2026-09-02, exponential backoff, base 2s, and max 5.

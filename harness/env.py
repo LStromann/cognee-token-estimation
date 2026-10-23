@@ -30,15 +30,51 @@ def _fmt_obj(o, **kw):
     return _fmt(o, **kw)
 
 
-def cognee_env(cfg, fmt):
+# Claude Code's own traffic must stay on the unprefixed proxy. These two variables
+# retarget the Anthropic SDK, so they belong on Cognee's processes only (the MCP
+# server and the hook commands), never on the claude process itself.
+CLAUDE_EXCLUDED_PROXY_KEYS = {"ANTHROPIC_BASE_URL", "ANTHROPIC_API_BASE"}
+
+
+def enrich_fmt(cfg, fmt=None, **kw):
+    """Fill lifecycle placeholders, including per-arm Cognee data directories."""
     import os
-    return {**os.environ, **{k: _fmt(v, **fmt) for k, v in (cfg["cognee"].get("proxy_env") or {}).items()}}
+    fmt = {**(fmt or {}), **{k: v for k, v in kw.items() if v is not None}}
+    work = str(cfg.get("work_dir") or "/tmp/ctb")
+    arm = str(fmt.get("arm") or "_")
+    topic = str(fmt.get("topic") or "_")
+    fmt.setdefault("work_dir", work)
+    fmt.setdefault("plugin_root", (cfg.get("cognee") or {}).get("plugin_root") or "")
+    fmt.setdefault("snapshot", fmt.get("snapshot") or "")
+    fmt.setdefault("workspace", fmt.get("workspace") or "")
+    fmt["dataset"] = _fmt((cfg.get("cognee") or {}).get("dataset") or "ctb_{topic}", **fmt)
+    fmt["cognee_system"] = str(pathlib.Path(work) / "cognee" / arm / topic / "system")
+    fmt["cognee_data"] = str(pathlib.Path(work) / "cognee" / arm / topic / "data")
+    fmt.setdefault("anthropic_api_key", os.environ.get("ANTHROPIC_API_KEY", ""))
+    return fmt
+
+
+def cognee_env(cfg, fmt):
+    """Environment for Cognee lifecycle commands, hooks, and the Cognee MCP server."""
+    import os
+    fmt = enrich_fmt(cfg, fmt)
+    formatted = {k: _fmt(v, **fmt) for k, v in (cfg["cognee"].get("proxy_env") or {}).items()}
+    formatted = {k: v for k, v in formatted.items() if v != ""}
+    merged = {**os.environ, **formatted}
+    prior = os.environ.get("PYTHONPATH")
+    merged["PYTHONPATH"] = str(ROOT) + (os.pathsep + prior if prior else "")
+    merged["CTB_WORK_DIR"] = str(cfg.get("work_dir") or merged.get("CTB_WORK_DIR") or "/tmp/ctb")
+    if fmt.get("proxy_cognee"):
+        merged["CTB_PROXY_COGNEE"] = fmt["proxy_cognee"]
+    if cfg.get("_dry_run"):
+        merged["CTB_COGNEE_BACKEND"] = "file"
+    return merged
 
 
 def sh(cmd, cfg=None, fmt=None, **kw):
     """Run a Cognee lifecycle command with Cognee's LLM/embeddings routed through the proxy."""
     if cmd:
-        fmt = {**(fmt or {}), **kw}
+        fmt = enrich_fmt(cfg, fmt, **kw) if cfg else {**(fmt or {}), **kw}
         subprocess.run(_fmt(cmd, **fmt), shell=True, check=True, env=cognee_env(cfg, fmt) if cfg else None)
 
 
@@ -47,15 +83,25 @@ def build_fresh(cfg, arm, topic, fmt=None):
     if slot.exists():
         shutil.rmtree(slot)
     ws = slot / "workspace"
-    if topic == "coding" and cfg["coding_repo"]["url"]:
+    repo = cfg.get("coding_repo") or {}
+    if topic == "coding" and repo.get("url") and not cfg.get("_dry_run"):
+        if not repo.get("commit"):
+            raise SystemExit("coding_repo.commit is empty. Pin a commit in config/experiment.yaml.")
         cache = slot.parent.parent / "repo_cache"
         if not cache.exists():
-            subprocess.run(["git", "clone", cfg["coding_repo"]["url"], str(cache)], check=True)
+            subprocess.run(["git", "clone", repo["url"], str(cache)], check=True)
         shutil.copytree(cache, ws, symlinks=True)
-        subprocess.run(["git", "reset", "--hard", cfg["coding_repo"]["commit"]], cwd=ws, check=True)
+        subprocess.run(["git", "reset", "--hard", repo["commit"]], cwd=ws, check=True)
         subprocess.run(["git", "clean", "-fdx"], cwd=ws, check=True)
+    elif topic == "coding":
+        ws.mkdir(parents=True)
+        offline = ROOT / "fixtures" / "coding_offline"
+        if offline.exists():
+            shutil.copytree(offline, ws, dirs_exist_ok=True)
     else:
         ws.mkdir(parents=True)
+    if topic == "coding" and (ROOT / "coding_overlay").exists():
+        shutil.copytree(ROOT / "coding_overlay", ws, dirs_exist_ok=True)
     shutil.copy(ROOT / "env/CLAUDE.md", ws / "CLAUDE.md")
     shutil.copytree(ROOT / "env/skills", ws / ".claude/skills", dirs_exist_ok=True)
     (slot / "config").mkdir(parents=True)
@@ -72,12 +118,13 @@ def write_mcp_config(cfg, arm, topic, slot, mock_log, fmt=None):
         servers[name] = {"command": sys.executable, "args": ["-m", f"mcp_mocks.{name}_server"],
                          "env": {"PYTHONPATH": str(ROOT), "MOCK_STATE_DIR": str(slot / "state"),
                                  "MOCK_LOG": str(mock_log)}}
-    fmt = {**(fmt or {}), "topic": topic, "arm": arm}
+    fmt = enrich_fmt(cfg, fmt, topic=topic, arm=arm)
     for name, spec in (adef.get("extra_mcp") or {}).items():
         spec = _fmt_obj(spec, **fmt)
         if name == "cognee":  # route Cognee's internal LLM/embedding calls through the proxy
             spec["env"] = {**(spec.get("env") or {}),
                            **{k: _fmt(v, **fmt) for k, v in (cfg["cognee"].get("proxy_env") or {}).items()}}
+            spec["env"] = {k: v for k, v in spec["env"].items() if v != ""}
         servers[name] = spec
     path = slot / "mcp.json"
     path.write_text(json.dumps({"mcpServers": servers}, indent=1))
@@ -107,12 +154,28 @@ def write_settings(cfg, arm, slot, fmt):
 
 
 def run_env(cfg, arm, slot, fmt, log_prefix):
-    """Env for Claude Code (and the hooks it spawns) in this arm."""
+    """Env for Claude Code (and the hooks it spawns) in this arm.
+
+    ANTHROPIC_BASE_URL stays the unprefixed proxy so Claude's own calls are
+    source=claude. Hook commands in the cognee arm prefix ANTHROPIC_BASE_URL with
+    the /cognee route themselves, which is what the plugin's server inherits.
+    """
+    import os
+    fmt = enrich_fmt(cfg, fmt, arm=arm)
+    prior = os.environ.get("PYTHONPATH")
     e = {"ANTHROPIC_BASE_URL": fmt["proxy"],
          "CTB_HOOKS_FILE": str(slot / "hooks.json"),
-         "CTB_COGNEE_HOOK_LOG": str(slot / f"{log_prefix}.cognee_hook.jsonl")}
-    if arm == "cognee":  # Cognee hooks also call Cognee's LLM -> through the proxy
-        e.update({k: _fmt(v, **fmt) for k, v in (cfg["cognee"].get("proxy_env") or {}).items()})
+         "CTB_SETTINGS_FILE": str(slot / "settings.json"),
+         "CTB_COGNEE_HOOK_LOG": str(slot / f"{log_prefix}.cognee_hook.jsonl"),
+         "CTB_ARM": arm,
+         "PYTHONPATH": str(ROOT) + (os.pathsep + prior if prior else "")}
+    if arm == "cognee":
+        formatted = {k: _fmt(v, **fmt) for k, v in (cfg["cognee"].get("proxy_env") or {}).items()
+                     if k not in CLAUDE_EXCLUDED_PROXY_KEYS}
+        e.update({k: v for k, v in formatted.items() if v != ""})
+    e["ANTHROPIC_BASE_URL"] = fmt["proxy"]
+    if cfg.get("_dry_run"):
+        e["CTB_DRY_RUN"] = "1"
     return e
 
 

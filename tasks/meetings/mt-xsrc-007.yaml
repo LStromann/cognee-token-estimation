@@ -1,0 +1,17 @@
+id: mt-xsrc-007
+topic: meetings
+type: cross_source
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- Does the on-call page match the on-call review?
+gold: No. NP-9 says Jonas is primary all week. The review set tom weekdays, samir weekends, escalate to
+  jonas.
+sources:
+- NP-9
+- MTG-0912
+grader:
+  kind: llm_judge
+  rubric: Pass if the page is stale and the three-way rotation is correct.

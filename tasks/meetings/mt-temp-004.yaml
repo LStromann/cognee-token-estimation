@@ -1,0 +1,16 @@
+id: mt-temp-004
+topic: meetings
+type: temporal
+hops: 3
+needs:
+- memory
+- mcp
+turns:
+- What renewal notice did Brightwave's counsel actually accept?
+gold: 90 days, plus a 30-day subprocessor notice. The 60-day figure is the old draft.
+sources:
+- MTG-0919
+- NP-6
+grader:
+  kind: llm_judge
+  rubric: Pass if renewal is 90 days. Fail if it is 60.

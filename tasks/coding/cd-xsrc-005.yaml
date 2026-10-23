@@ -1,0 +1,19 @@
+id: cd-xsrc-005
+topic: coding
+type: cross_source
+hops: 2
+needs:
+- memory
+- mcp
+- code
+turns:
+- The latest eng sync added jitter. Which tenacity wait class matches that, and which one is the wrong
+  choice?
+gold: 'Use wait_random_exponential (full jitter) or wait_exponential_jitter. Plain wait_exponential is
+  the wrong choice: its docstring says the intervals are fixed.'
+sources:
+- overlay
+- mcp
+grader:
+  kind: llm_judge
+  rubric: Pass if a jittering class is recommended and wait_exponential is rejected.

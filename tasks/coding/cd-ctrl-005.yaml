@@ -1,0 +1,14 @@
+id: cd-ctrl-005
+topic: coding
+type: control
+hops: 1
+needs:
+- mcp
+turns:
+- List the file paths changed by GitHub pull request 91.
+gold: tidepool_sync/retry_policy.py and tests/test_retry.py.
+sources:
+- named
+grader:
+  kind: llm_judge
+  rubric: Pass if both paths are named.

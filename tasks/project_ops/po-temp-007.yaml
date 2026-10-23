@@ -1,0 +1,17 @@
+id: po-temp-007
+topic: project_ops
+type: temporal
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- Which HTTP header name carries webhook signatures?
+gold: X-Tidepool-Signature. X-Hub-Signature is the stale name still on LIN-151 and the signature notes.
+sources:
+- C02
+- NP-19
+- LIN-151
+grader:
+  kind: llm_judge
+  rubric: Pass if the header is X-Tidepool-Signature. Fail if the answer is X-Hub-Signature.

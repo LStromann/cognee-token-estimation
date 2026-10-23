@@ -133,8 +133,18 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", required=True)
     ap.add_argument("--config", default="config/experiment.yaml")
+    ap.add_argument("--host", default="")
+    ap.add_argument("--port", type=int, default=0)
+    ap.add_argument("--upstream", default="")
     a = ap.parse_args()
-    asyncio.run(serve(load_config(a.config), pathlib.Path(a.out)))
+    cfg = load_config(a.config)
+    if a.host:
+        cfg["tokens"]["proxy_host"] = a.host
+    if a.port:
+        cfg["tokens"]["port"] = a.port
+    if a.upstream:
+        cfg["tokens"]["upstream"] = a.upstream
+    asyncio.run(serve(cfg, pathlib.Path(a.out)))
 
 
 if __name__ == "__main__":

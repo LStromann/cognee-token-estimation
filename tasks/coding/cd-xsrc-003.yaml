@@ -1,0 +1,18 @@
+id: cd-xsrc-003
+topic: coding
+type: cross_source
+hops: 2
+needs:
+- memory
+- mcp
+- code
+turns:
+- Why does the Brightwave duplicate bug line up with idempotent_key in this repo?
+gold: 'LIN-155, GitHub #88, and the #support thread say retries are not idempotent. idempotent_key formats
+  ''{record_id}:{attempt}'', and PR #110 keeps the attempt in the key. A retry must reuse one key.'
+sources:
+- overlay
+- mcp
+grader:
+  kind: llm_judge
+  rubric: Pass if the function format and the tickets agree that the attempt number is the bug.

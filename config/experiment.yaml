@@ -6,13 +6,26 @@ models:                     # agent models; the run matrix covers each one (over
 judge_model: claude-sonnet-5-5   # fixed for ALL runs, so grading doesn't vary with the agent model
 warmup_model: claude-opus-5-5    # fixed, so both arms build memory from identical sessions
 
+# Cross-check from a different model family. Disagreement is reported, not an automatic fail.
+# Transport or parse errors are secondary_error, not a flag. Only two successful verdicts
+# that differ set judge_disagreement.
+secondary_judge:
+  enabled: true
+  provider: openai
+  model: gpt-4.1-mini
+  base_url: https://api.openai.com/v1
+  api_key_env: OPENAI_API_KEY
+  timeout_s: 60
+
 # ---- Design ----
 arms: [baseline, cognee]
 topics: [coding, project_ops, meetings]
 repetitions: 3              # set from pilot variance
 seed: 42                    # arm order is shuffled per (task, rep)
 pilot:
-  tasks_per_topic: 5        # first N tasks per topic (sorted by id)
+  # Spread across task types (action, code_fix, codebase_qa, ...), not the first ids.
+  # Five tasks per topic therefore still hit hidden tests, state_check, and the LLM judge.
+  tasks_per_topic: 5
   repetitions: 2
 
 warmup:
@@ -28,9 +41,12 @@ claude:
   max_turns: 40
   timeout_s: 1200
 
-coding_repo:                # real repo for the coding topic
-  url: ""                   # TODO e.g. https://github.com/<org>/<repo>.git
-  commit: ""                # TODO pinned sha
+coding_repo:                # open-source repo the coding topic is graded against
+  url: https://github.com/jd/tenacity.git
+  # main as of 2026-10-12, "feat: support Python 3.15 (#754)", Apache-2.0.
+  # Product code under test is coding_overlay/tidepool_sync, copied onto this checkout.
+  # Hidden tests grade the overlay. codebase_qa asks about tenacity at this pin.
+  commit: 32ac68f0941319c0d2f4fb927f96e4ee29bb46c6
 
 # ---- Token accounting (exact, one proxy, one port; see docs/token-measurement.md) ----
 tokens:
@@ -42,7 +58,9 @@ tokens:
     # /cognee_embed: {source: cognee_embed, upstream: https://api.openai.com}  # only if not using local embeddings
   net_sources: [cognee]                        # Cognee sources included in net_delta (same tokenizer as Claude)
   direct_base_url: https://api.anthropic.com   # judge + count_tokens go here directly (never counted)
-  cognee_tool_prefix: "mcp__cognee__"          # tool results/defs from these tools = Cognee context
+  cognee_tool_prefix: "mcp__cognee__"          # kept so older logs still attribute
+  # Plugin module tools are mcp__cognee-memory__*; the standalone cognee-mcp server is mcp__cognee__*.
+  cognee_tool_prefixes: ["mcp__cognee__", "mcp__cognee-memory__"]
   keep_request_bodies: false                   # bodies are deleted after attribution (they get large)
   crosscheck_tolerance: 0.01                   # flag runs where proxy vs stream-json differ by >1%
   weights:                                     # relative cost per token (input = 1) for the cost view
@@ -51,28 +69,90 @@ tokens:
     cache_read_input_tokens: 0.1
     output_tokens: 5.0
 
-# Cognee lifecycle hooks (shell). Placeholders: {arm} {topic} {snapshot} {workspace} {proxy} {proxy_cognee}
+# Cognee lifecycle. Placeholders: {arm} {topic} {snapshot} {workspace} {proxy} {proxy_cognee}
+# {dataset} {plugin_root} {cognee_system} {cognee_data} {work_dir} {anthropic_api_key}
+#
+# Claude Code keeps ANTHROPIC_BASE_URL on the unprefixed proxy (source=claude).
+# Cognee's Python Anthropic adapter ignores LLM_ENDPOINT. It builds
+# anthropic.AsyncAnthropic(api_key=...) and the SDK reads ANTHROPIC_BASE_URL.
+# That variable is set only on Cognee processes: the MCP server env, and the
+# hook commands below (so a local server SessionStart boots inherits /cognee).
+# Do not put ANTHROPIC_BASE_URL=/cognee in ~/.cognee/.env; a dotenv that
+# overrides the hook prefix would bill Cognee as source=claude or off-proxy.
+# COGNEE_LLM_OBSERVER stays false so local mode does not route LLM calls
+# through `claude -p` (those would be untagged source=claude).
 cognee:
   dataset: "ctb_{topic}"
-  proxy_env:                       # TODO: verify Cognee's env names
-    LLM_PROVIDER: anthropic        # Cognee uses Claude -> same tokenizer, same port
-    LLM_MODEL: claude-sonnet-5-5   # pin Cognee's model
-    LLM_ENDPOINT: "{proxy_cognee}"
-    EMBEDDING_PROVIDER: fastembed  # local embeddings -> no API tokens (TODO verify)
-  # The Cognee plugin's REAL hook commands. The harness wraps each one in harness/hooks/tee_hook.py,
-  # which passes everything through unchanged and logs what was injected (nothing added to the context).
-  hook_log:                        # Option A: read the Cognee plugin's own hook log (set path to enable)
-    path: ""                       # e.g. "{workspace}/.cognee/hook.log"  (placeholders: {workspace} {config_dir} {home})
-    text_field: ""                 # jsonl field with the injected text; "" = whole line is the text
-  # Option B (when hook_log.path is empty): hooks are wrapped in harness/hooks/tee_hook.py, which logs for us.
-  hooks: []                        # TODO e.g.
-    # - {event: SessionStart,     command: "<cognee plugin session-start hook>"}
-    # - {event: UserPromptSubmit, command: "<cognee plugin prompt hook>"}
-    # - {event: PostToolUse,      command: "<cognee plugin post-tool hook>", matcher: "Edit|Write"}
-  reset_cmd: ""             # TODO wipe dataset before warm-up
-  after_warmup_cmd: ""      # TODO optional explicit ingest/cognify after warm-up
-  snapshot_cmd: ""          # TODO export dataset into {snapshot}/cognee
-  restore_cmd: ""           # TODO restore dataset from {snapshot}/cognee
+  # MANUAL SLOT. Absolute path of the installed cognee-memory plugin directory
+  # (the one that contains scripts/hook_runner.py). CLAUDE_PLUGIN_ROOT is set
+  # for plugin hooks, not for the settings.json hooks this harness writes.
+  # Real runs refuse to start while this is empty. `make pilot-dry` does not need it.
+  plugin_root: ""
+  proxy_env:
+    LLM_PROVIDER: anthropic
+    # LiteLLM-style id. Use an id your installed Cognee/LiteLLM build accepts
+    # (docs examples use anthropic/claude-sonnet-5). The anthropic/ prefix is required.
+    LLM_MODEL: anthropic/claude-sonnet-5-5
+    LLM_API_KEY: "{anthropic_api_key}"
+    ANTHROPIC_BASE_URL: "{proxy_cognee}"
+    ANTHROPIC_API_BASE: "{proxy_cognee}"
+    EMBEDDING_PROVIDER: fastembed
+    EMBEDDING_MODEL: sentence-transformers/all-MiniLM-L6-v2
+    EMBEDDING_DIMENSIONS: "384"
+    COGNEE_LLM_OBSERVER: "false"
+    COGNEE_PLUGIN_DATASET: "{dataset}"
+    SYSTEM_ROOT_DIRECTORY: "{cognee_system}"
+    DATA_ROOT_DIRECTORY: "{cognee_data}"
+  # Option A: the plugin's own hook log. Leave path empty.
+  # ~/.cognee-plugin/claude-code/hook.log records events, not the injected passage,
+  # so it cannot attribute context. A future plugin field that stores the passage
+  # can set path and text_field; that disables the tee wrapper.
+  hook_log:
+    path: ""
+    text_field: ""
+  # Option B (hook_log.path empty): each command is wrapped by harness/hooks/tee_hook.py.
+  # Commands are the public plugin hooks (integrations/claude-code/hooks/hooks.json),
+  # with ${CLAUDE_PLUGIN_ROOT} replaced by {plugin_root}, and with the proxy env
+  # prefixed so a server the hook boots inherits the /cognee route.
+  hooks:
+    - event: SessionStart
+      command: 'ANTHROPIC_BASE_URL="{proxy_cognee}" ANTHROPIC_API_BASE="{proxy_cognee}" COGNEE_LLM_OBSERVER=false python3 "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/session-start.py" || python "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/session-start.py"'
+    - event: UserPromptSubmit
+      command: 'ANTHROPIC_BASE_URL="{proxy_cognee}" ANTHROPIC_API_BASE="{proxy_cognee}" COGNEE_LLM_OBSERVER=false python3 "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/session-context-lookup.py" || python "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/session-context-lookup.py"'
+    - event: UserPromptSubmit
+      command: 'ANTHROPIC_BASE_URL="{proxy_cognee}" ANTHROPIC_API_BASE="{proxy_cognee}" COGNEE_LLM_OBSERVER=false python3 "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/store-user-prompt.py" || python "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/store-user-prompt.py"'
+    - event: PreToolUse
+      matcher: Read
+      command: 'ANTHROPIC_BASE_URL="{proxy_cognee}" ANTHROPIC_API_BASE="{proxy_cognee}" COGNEE_LLM_OBSERVER=false python3 "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/file-context.py" || python "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/file-context.py"'
+    - event: PostToolUse
+      matcher: "Bash|Agent|Read|Write|Edit|Grep|Glob"
+      command: 'ANTHROPIC_BASE_URL="{proxy_cognee}" ANTHROPIC_API_BASE="{proxy_cognee}" COGNEE_LLM_OBSERVER=false python3 "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/store-to-session.py" || python "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/store-to-session.py"'
+    - event: Stop
+      command: 'ANTHROPIC_BASE_URL="{proxy_cognee}" ANTHROPIC_API_BASE="{proxy_cognee}" COGNEE_LLM_OBSERVER=false python3 "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/store-to-session.py" --stop || python "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/store-to-session.py" --stop'
+    - event: Stop
+      command: 'ANTHROPIC_BASE_URL="{proxy_cognee}" ANTHROPIC_API_BASE="{proxy_cognee}" COGNEE_LLM_OBSERVER=false python3 "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/credits-refresh.py" || python "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/credits-refresh.py"'
+    - event: StopFailure
+      command: 'ANTHROPIC_BASE_URL="{proxy_cognee}" ANTHROPIC_API_BASE="{proxy_cognee}" COGNEE_LLM_OBSERVER=false python3 "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/credits-refresh.py" || python "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/credits-refresh.py"'
+    - event: PreCompact
+      command: 'ANTHROPIC_BASE_URL="{proxy_cognee}" ANTHROPIC_API_BASE="{proxy_cognee}" COGNEE_LLM_OBSERVER=false python3 "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/pre-compact.py" || python "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/pre-compact.py"'
+    - event: SessionEnd
+      command: 'ANTHROPIC_BASE_URL="{proxy_cognee}" ANTHROPIC_API_BASE="{proxy_cognee}" COGNEE_LLM_OBSERVER=false python3 "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/sync-session-to-graph.py" --session-end || python "{plugin_root}/scripts/hook_runner.py" "{plugin_root}/scripts/sync-session-to-graph.py" --session-end'
+  # server_cmd is intentionally unset. The plugin boots its local API from SessionStart
+  # (default http://localhost:8011) unless the operator sets COGNEE_MANAGED_ENDPOINT=true.
+  # No uvicorn module path is guessed here.
+  reset_cmd: python3 -m harness.cognee_ctl reset --arm {arm} --topic {topic} --dataset {dataset} --snapshot '{snapshot}' --workspace '{workspace}'
+  after_session_cmd: python3 -m harness.cognee_ctl kick --arm {arm} --topic {topic} --dataset {dataset} --snapshot '{snapshot}' --workspace '{workspace}'
+  after_warmup_cmd: python3 -m harness.cognee_ctl kick --arm {arm} --topic {topic} --dataset {dataset} --snapshot '{snapshot}' --workspace '{workspace}'
+  status_cmd: python3 -m harness.cognee_ctl status --arm {arm} --topic {topic} --dataset {dataset} --snapshot '{snapshot}' --workspace '{workspace}'
+  snapshot_cmd: python3 -m harness.cognee_ctl snapshot --arm {arm} --topic {topic} --dataset {dataset} --snapshot '{snapshot}' --workspace '{workspace}'
+  restore_cmd: python3 -m harness.cognee_ctl restore --arm {arm} --topic {topic} --dataset {dataset} --snapshot '{snapshot}' --workspace '{workspace}'
+  # Poll cognify until it is finished. running and error are never ready.
+  # The runner waits after every warm-up session and again before snapshot.
+  # snapshot_cmd also exits 3 while status is running.
+  wait:
+    poll_s: 2
+    timeout_s: 900
+    ready_statuses: [completed, idle]
 
 # ---- Sizing plan (validated by `make validate`) ----
 sizing:

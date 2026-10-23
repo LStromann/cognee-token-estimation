@@ -1,0 +1,23 @@
+id: mt-act-004
+topic: meetings
+type: action
+hops: 2
+needs:
+- memory
+- mcp
+- skill
+turns:
+- Create a Linear ticket assigned to nora for the subprocessor clause. The description must contain '30
+  days'.
+gold: New issue assigned to nora containing the 30-day subprocessor notice.
+sources:
+- MTG-0919
+grader:
+  kind: state_check
+  checks:
+  - server: linear
+    collection: issues
+    created_in_run: true
+    where:
+      assignee: nora
+      description_contains: 30 days

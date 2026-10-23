@@ -1,0 +1,14 @@
+id: mt-ctrl-003
+topic: meetings
+type: control
+hops: 1
+needs:
+- mcp
+turns:
+- Summarise the Notion page 'Onboarding Checklist' in one sentence per step.
+gold: Create workspace; connect first source; configure sync schedule; invite teammates; set up alerts.
+sources:
+- named source
+grader:
+  kind: llm_judge
+  rubric: Pass if all five steps appear.

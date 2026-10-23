@@ -1,0 +1,17 @@
+id: mt-xsrc-004
+topic: meetings
+type: cross_source
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- Does the MSA summary match the legal review?
+gold: No. NP-6 has a 60-day renewal and no subprocessor clause. MTG-0919 set 90 and 30 days. Cap 12 months
+  of fees matches.
+sources:
+- NP-6
+- MTG-0919
+grader:
+  kind: llm_judge
+  rubric: Pass if the two notice periods are the new numbers and the cap is called out as unchanged.

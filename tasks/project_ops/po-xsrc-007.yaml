@@ -1,0 +1,19 @@
+id: po-xsrc-007
+topic: project_ops
+type: cross_source
+hops: 3
+needs:
+- memory
+- mcp
+turns:
+- Do the duplicate-record reports agree on the cause? What should engineering change?
+gold: 'Yes on the cause. LIN-155, GitHub #88, and #support all describe duplicates after a failed sync
+  because the idempotency key includes the attempt. Retries must reuse one key per record.'
+sources:
+- LIN-155
+- GH-88
+- C03
+grader:
+  kind: llm_judge
+  rubric: Pass if the cause is a non-stable idempotency key (attempt number included) and the fix is a
+    stable key. Fail if it blames the region move.

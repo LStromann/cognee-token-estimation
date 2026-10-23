@@ -1,0 +1,16 @@
+id: mt-xsrc-003
+topic: meetings
+type: cross_source
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- Does LIN-170 match the infra decision meeting?
+gold: No. LIN-170 is active-active writes. MTG-0918 chose eu-central-1 plus warm standby eu-west-1.
+sources:
+- LIN-170
+- MTG-0918
+grader:
+  kind: llm_judge
+  rubric: Pass if the ticket and the meeting disagree and the meeting wins.

@@ -1,0 +1,18 @@
+id: cd-fix-007
+topic: coding
+type: code_fix
+hops: 2
+needs:
+- memory
+- mcp
+- code
+turns:
+- should_retry must follow the current cap of 4 attempts. Attempt numbers are 1-based counts of tries
+  already started. Attempt 4 must not retry; attempt 3 must.
+gold: should_retry(3) is True and should_retry(4) is False.
+sources:
+- MTG-0916
+grader:
+  kind: tests
+  hidden_tests: tasks/coding/hidden/cd-fix-007
+  command: python3 -m pytest -q tests/hidden --rootdir=. --override-ini=pythonpath=. -p no:cacheprovider

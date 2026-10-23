@@ -1,0 +1,16 @@
+id: po-recall-002
+topic: project_ops
+type: recall
+hops: 1
+needs:
+- memory
+- mcp
+turns:
+- Who is assigned the Brightwave duplicate-records ticket, and which GitHub issue does it point at?
+gold: LIN-155 is assigned to jonas. It points at GitHub issue 88.
+sources:
+- LIN-155
+- GH-88
+grader:
+  kind: llm_judge
+  rubric: 'Pass if it names Jonas (or jonas) AND GitHub #88. Fail if it names a different owner or issue.'

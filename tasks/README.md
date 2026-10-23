@@ -2,7 +2,7 @@
 One YAML file per task in `tasks/<topic>/`. Fields:
 
 ```yaml
-id: po-xsrc-001          # unique; pilot uses the first N ids per topic
+id: po-xsrc-001          # unique; pilot spreads across types (not the first ids)
 topic: project_ops       # coding | project_ops | meetings
 type: cross_source       # recall | cross_source | temporal | action | codebase_qa | code_fix | multi_turn | control
 hops: 3                  # number of sources needed (1-3)

@@ -1,0 +1,16 @@
+id: po-temp-004
+topic: project_ops
+type: temporal
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- How many days of renewal notice does the Brightwave contract require now?
+gold: 90 days. The MSA summary still says 60. The liability cap is still 12 months of fees.
+sources:
+- NP-6
+- MTG-0919
+grader:
+  kind: llm_judge
+  rubric: Pass if the notice is 90 days. Fail if it is 60.

@@ -1,0 +1,15 @@
+id: cd-recall-002
+topic: coding
+type: recall
+hops: 1
+needs:
+- memory
+- code
+turns:
+- 'From memory of this repo: what comparison does stop_after_attempt use?'
+gold: retry_state.attempt_number >= max_attempt_number, in tenacity/stop.py.
+sources:
+- repo
+grader:
+  kind: llm_judge
+  rubric: Pass if the comparison direction is >= on attempt_number.

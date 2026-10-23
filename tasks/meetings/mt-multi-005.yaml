@@ -1,0 +1,17 @@
+id: mt-multi-005
+topic: meetings
+type: multi_turn
+hops: 2
+needs:
+- memory
+- mcp
+- skill
+turns:
+- What did the infra decision meeting settle for regions and Redis?
+- 'Draft a #infra post. Don''t send it.'
+gold: eu-central-1 plus warm standby eu-west-1. Redis on Render until 2026-11-30.
+sources:
+- story
+grader:
+  kind: llm_judge
+  rubric: Judge the final turn. Pass if both regions are correct and Redis is not moving immediately.

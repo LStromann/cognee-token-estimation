@@ -1,0 +1,23 @@
+id: mt-act-002
+topic: meetings
+type: action
+hops: 2
+needs:
+- memory
+- mcp
+- skill
+turns:
+- Create a Linear ticket assigned to priya capturing the launch-review follow-up. The description must
+  contain 'Nov 5'.
+gold: New issue assigned to priya containing Nov 5.
+sources:
+- MTG-0923
+grader:
+  kind: state_check
+  checks:
+  - server: linear
+    collection: issues
+    created_in_run: true
+    where:
+      assignee: priya
+      description_contains: Nov 5

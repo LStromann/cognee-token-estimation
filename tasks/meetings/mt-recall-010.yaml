@@ -1,0 +1,15 @@
+id: mt-recall-010
+topic: meetings
+type: recall
+hops: 1
+needs:
+- memory
+- mcp
+turns:
+- Which region is the warm standby, and who required that we not do active-active writes?
+gold: Warm standby is eu-west-1. Maya rejected active-active multi-region writes. Primary region is eu-central-1.
+sources:
+- MTG-0918
+grader:
+  kind: llm_judge
+  rubric: Pass if the standby region is eu-west-1 and Maya is the one who rejected active-active writes.

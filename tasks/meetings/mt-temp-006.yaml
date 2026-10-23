@@ -1,0 +1,16 @@
+id: mt-temp-006
+topic: meetings
+type: temporal
+hops: 3
+needs:
+- memory
+- mcp
+turns:
+- How long are sync logs retained?
+gold: '30 days, stated by Nora in the legal review and #legal. The privacy page''s 90 days is stale.'
+sources:
+- NP-10
+- C07
+grader:
+  kind: llm_judge
+  rubric: Pass for 30 days. Fail for 90.

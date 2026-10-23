@@ -47,6 +47,7 @@ def headline(p, by):
         rows.append({**dict(zip(by, key if isinstance(key, tuple) else (key,))),
                      "pairs": len(g), "both_pass": len(ok),
                      "succ_base": round(g.success_b.mean(), 2), "succ_cognee": round(g.success_c.mean(), 2),
+                     "succ_delta": round(float(g.success_c.mean() - g.success_b.mean()), 2),
                      "median_base_tokens": _i(ok.base_total.median()),
                      "median_net_delta": _i(ok.net_delta.median()),
                      "median_net_delta_pct": _r(ok.net_delta_pct.median()),
@@ -143,11 +144,35 @@ def main():
                    "mean_delta_per_task_excl_ingest": _i(per_task),
                    "break_even_tasks": _i(ing_tot.get(t, 0) / -per_task) if per_task < 0 else "never"})
 
+    if "dry_run" not in df.columns:
+        df["dry_run"] = False
+    if "judge_disagreement" not in df.columns:
+        df["judge_disagreement"] = False
+    synthetic = bool(df["dry_run"].fillna(False).astype(bool).any())
     flags = int(df.get("token_crosscheck_flag", pd.Series(dtype=bool)).fillna(False).sum())
     missing = int(sum(df.get(f"{s}_usage_missing", pd.Series(0)).sum() for s in ["claude"] + csrc + osrc))
     unmatched = int(df.get("cognee_hook_unmatched", pd.Series(0)).fillna(0).sum())
+    disagree = df[df["judge_disagreement"].fillna(False).astype(bool)].copy()
+    disagree_cols = [c for c in
+                     ["task_id", "model", "arm", "rep", "success", "secondary_success",
+                      "grade_reason", "secondary_reason"]
+                     if c in disagree.columns]
+    disagree_md = "(none)" if disagree.empty else disagree[disagree_cols].to_markdown(index=False)
+    banner = []
+    if synthetic:
+        banner = [
+            "> **SYNTHETIC DRY-RUN.** These numbers come from the fake LLM backend "
+            "(`harness/fake_upstream.py`, `harness/fake_claude.py`). They are not Cognee token savings. "
+            "The stand-in agent uses a fixed call pattern (baseline: 4 Claude calls; cognee: 2 Claude calls "
+            "plus 1 internal call) so every `net_delta` term is non-zero. It does not actually skip exploration. "
+            "Do not cite this report as a result.",
+            "",
+        ]
     parts = ["# Results: cognee vs baseline",
-             "Negative = Cognee saves tokens. Only pairs where both arms pass count toward token deltas.", "",
+             *banner,
+             "Negative = Cognee saves tokens. Only pairs where both arms pass count toward token deltas.",
+             "Coding tasks are inside this headline, on the same formula as project_ops and meetings.",
+             "",
              "## Headline", headline(p, ["model"]).to_markdown(index=False), "",
              "## Where the tokens go (means, cognee arm minus baseline)",
              "`exploration_delta + carried_ctx + tooldefs + cognee_internal + ingest_share = net_delta`. "
@@ -159,10 +184,16 @@ def main():
              "## Cognee ingestion and break-even", pd.DataFrame(be).to_markdown(index=False), "",
              *([f"## Reported separately (different tokenizer, not in net_delta)",
                 p.groupby("model")[[f"{s_}_separate" for s_ in osrc]].median().round(0).to_markdown(), ""] if osrc else []),
+             "## Judge disagreements",
+             "Primary judge versus the secondary model. A row appears only when both verdicts succeeded and differ. "
+             "Review the gold for these tasks. A transport or parse error is not a flag.",
+             "",
+             disagree_md, "",
              "## Data quality",
              f"- runs where proxy and stream-json disagree by more than {cfg['tokens']['crosscheck_tolerance']:.0%}: {flags}",
              f"- API responses without usage (check proxy parsing for that provider): {missing}",
-             f"- logged Cognee hook texts not found in Claude's requests: {unmatched}"]
+             f"- logged Cognee hook texts not found in Claude's requests: {unmatched}",
+             f"- runs flagged for judge disagreement: {len(disagree)}"]
     (out / "report.md").write_text("\n".join(parts))
     print("\n".join(parts))
 

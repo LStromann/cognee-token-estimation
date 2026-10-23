@@ -1,0 +1,17 @@
+id: po-temp-003
+topic: project_ops
+type: temporal
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- What are we charging Northwind right now, and for how many connectors?
+gold: $3100 per month for 5 connectors, approved 2026-09-20. The $2400 / 3 connector pilot is no longer
+  current.
+sources:
+- NP-7
+- MTG-0920
+grader:
+  kind: llm_judge
+  rubric: Pass if the price is $3100 and connectors are 5. Fail if the pilot price is given as current.

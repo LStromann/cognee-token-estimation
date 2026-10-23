@@ -1,0 +1,17 @@
+id: cd-qa-001
+topic: coding
+type: codebase_qa
+hops: 1
+needs:
+- code
+turns:
+- Where is tenacity's wait_exponential defined, and does that strategy add jitter?
+gold: 'Class wait_exponential in tenacity/wait.py. The docstring says the intervals are fixed and there
+  is no jitter; it is not for contention between processes. Use wait_random_exponential for that. Defaults:
+  multiplier=1, exp_base=2, min=0.'
+sources:
+- tenacity
+grader:
+  kind: llm_judge
+  rubric: Pass if it names tenacity/wait.py and wait_exponential and says this class does not add jitter.
+    Fail if it claims wait_exponential jitters.

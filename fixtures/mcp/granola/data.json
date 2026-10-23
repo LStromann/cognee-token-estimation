@@ -1,6 +1,31 @@
 {
  "meetings": [
   {
+   "id": "MTG-0820",
+   "title": "Q2 retro",
+   "date": "2026-08-20",
+   "attendees": [
+    "maya",
+    "jonas",
+    "priya"
+   ],
+   "summary": "Shipped the first connector. No retry, pricing, or infra decision.",
+   "transcript": [
+    {
+     "speaker": "maya",
+     "text": "Nice quarter. Let's plan September properly."
+    },
+    {
+     "speaker": "priya",
+     "text": "I'll book the eng sync and the brand workshop."
+    },
+    {
+     "speaker": "jonas",
+     "text": "Nothing about retries today."
+    }
+   ]
+  },
+  {
    "id": "MTG-0902",
    "title": "Eng sync",
    "date": "2026-09-02",
@@ -9,7 +34,7 @@
     "tom",
     "priya"
    ],
-   "summary": "Decided exponential backoff for sync retries (base 2s, max 5). Priya owns the spec.",
+   "summary": "Decided exponential backoff, base 2s, max 5. Priya owns the spec.",
    "transcript": [
     {
      "speaker": "jonas",
@@ -21,11 +46,164 @@
     },
     {
      "speaker": "jonas",
-     "text": "Agreed, max 5 retries. Priya, can you write the spec?"
+     "text": "Agreed, max 5 retries. No jitter yet. Priya, can you write the spec?"
     },
     {
      "speaker": "priya",
      "text": "Yes, I'll put Sync Retry Policy v2 in Notion."
+    }
+   ]
+  },
+  {
+   "id": "MTG-0905",
+   "title": "Northwind pricing",
+   "date": "2026-09-05",
+   "attendees": [
+    "maya",
+    "priya"
+   ],
+   "summary": "Pilot at $2400/mo for 3 connectors.",
+   "transcript": [
+    {
+     "speaker": "priya",
+     "text": "Northwind will start at $2400 a month, 3 connectors."
+    },
+    {
+     "speaker": "maya",
+     "text": "Approved for the pilot only. Come back before we expand it."
+    }
+   ]
+  },
+  {
+   "id": "MTG-0908",
+   "title": "Security tools",
+   "date": "2026-09-08",
+   "attendees": [
+    "samir",
+    "jonas",
+    "maya"
+   ],
+   "summary": "Chose Vanta for SOC 2. Drata is out.",
+   "transcript": [
+    {
+     "speaker": "samir",
+     "text": "I trialled Drata and Vanta."
+    },
+    {
+     "speaker": "jonas",
+     "text": "Vanta fits the way we already collect evidence."
+    },
+    {
+     "speaker": "maya",
+     "text": "Then it's Vanta. Samir, you own it. Please correct the security page, it still says we are evaluating Drata."
+    }
+   ]
+  },
+  {
+   "id": "MTG-0909",
+   "title": "Infra design review",
+   "date": "2026-09-09",
+   "attendees": [
+    "samir",
+    "jonas",
+    "maya"
+   ],
+   "summary": "Proposal only: active-active multi-region. Not the final decision.",
+   "transcript": [
+    {
+     "speaker": "samir",
+     "text": "Proposal: active-active writes in two regions, and move Redis the same week."
+    },
+    {
+     "speaker": "jonas",
+     "text": "I'm not ready to sign that. Let's revisit next week."
+    },
+    {
+     "speaker": "maya",
+     "text": "Treat this as a proposal, not a decision."
+    }
+   ]
+  },
+  {
+   "id": "MTG-0911",
+   "title": "Brand values workshop",
+   "date": "2026-09-11",
+   "attendees": [
+    "hana",
+    "maya",
+    "priya"
+   ],
+   "summary": "Values are Clear water, Honest sync, No dark patterns. Tagline stays. Rejected 'Move fast, sync faster'.",
+   "transcript": [
+    {
+     "speaker": "hana",
+     "text": "The old page says move fast. That is not us."
+    },
+    {
+     "speaker": "maya",
+     "text": "The values are Clear water, Honest sync, and No dark patterns."
+    },
+    {
+     "speaker": "priya",
+     "text": "Tagline stays 'Sync that stays in its lane.'."
+    },
+    {
+     "speaker": "hana",
+     "text": "We are explicitly rejecting 'Move fast, sync faster'. I'll fix the Notion page."
+    }
+   ]
+  },
+  {
+   "id": "MTG-0912",
+   "title": "On-call review",
+   "date": "2026-09-12",
+   "attendees": [
+    "jonas",
+    "tom",
+    "samir"
+   ],
+   "summary": "Weekdays Tom, weekends Samir, escalate to Jonas.",
+   "transcript": [
+    {
+     "speaker": "jonas",
+     "text": "I should not be primary anymore."
+    },
+    {
+     "speaker": "tom",
+     "text": "I can take weekdays."
+    },
+    {
+     "speaker": "samir",
+     "text": "Weekends, and we escalate to Jonas."
+    },
+    {
+     "speaker": "jonas",
+     "text": "That's the rotation. The Notion on-call page is stale."
+    }
+   ]
+  },
+  {
+   "id": "MTG-0914",
+   "title": "INC-19 bridge",
+   "date": "2026-09-14",
+   "attendees": [
+    "lea",
+    "jonas",
+    "tom"
+   ],
+   "summary": "INC-19 SEV-2 for Brightwave: retry storm.",
+   "transcript": [
+    {
+     "speaker": "lea",
+     "text": "Brightwave is seeing duplicate records after failed syncs. I opened LIN-155."
+    },
+    {
+     "speaker": "tom",
+     "text": "The retry path re-sends the same records with a new attempt number in the key."
+    },
+    {
+     "speaker": "jonas",
+     "text": "This is a SEV-2. Don't change the written policy on this call; we'll decide the cap on Monday."
     }
    ]
   },
@@ -38,19 +216,101 @@
     "tom",
     "lea"
    ],
-   "summary": "Brightwave hit rate limits; max retries reduced to 4 with jitter. Ticket/spec to be updated.",
+   "summary": "Max retries reduced to 4 with jitter. Ticket and spec still say 5.",
    "transcript": [
     {
      "speaker": "lea",
-     "text": "Brightwave is hitting rate limits during retry storms."
+     "text": "Brightwave hit rate limits during retry storms."
     },
     {
      "speaker": "jonas",
-     "text": "Then we go to max 4 retries and add jitter. That's the decision."
+     "text": "Then we go to max 4 retries and add jitter. That's the decision. A cap of 3 is rejected."
     },
     {
      "speaker": "tom",
-     "text": "I'll change the code; ticket and spec still say 5, someone should update them."
+     "text": "I'll change the code. LIN-142 and the Notion spec still say 5, and the idempotency key still includes the attempt."
+    },
+    {
+     "speaker": "jonas",
+     "text": "Also require an Idempotency-Key header on POST /sync."
+    }
+   ]
+  },
+  {
+   "id": "MTG-0918",
+   "title": "Infra decision",
+   "date": "2026-09-18",
+   "attendees": [
+    "maya",
+    "samir",
+    "jonas"
+   ],
+   "summary": "Single region eu-central-1 plus warm standby in eu-west-1. Redis stays on Render until 2026-11-30.",
+   "transcript": [
+    {
+     "speaker": "samir",
+     "text": "The design doc still says active-active."
+    },
+    {
+     "speaker": "maya",
+     "text": "We are not doing active-active multi-region writes. One region, eu-central-1, with a warm standby in eu-west-1."
+    },
+    {
+     "speaker": "jonas",
+     "text": "Redis stays on Render until 2026-11-30, then ElastiCache. Not this week."
+    },
+    {
+     "speaker": "samir",
+     "text": "I'll close the active-active terraform and correct LIN-170 and LIN-183."
+    }
+   ]
+  },
+  {
+   "id": "MTG-0919",
+   "title": "Brightwave legal review",
+   "date": "2026-09-19",
+   "attendees": [
+    "nora",
+    "maya",
+    "priya"
+   ],
+   "summary": "Cap stays 12 months of fees. Renewal notice becomes 90 days. Subprocessor notice 30 days. Residency stays EU.",
+   "transcript": [
+    {
+     "speaker": "nora",
+     "text": "Counsel accepted the liability cap of 12 months of fees."
+    },
+    {
+     "speaker": "priya",
+     "text": "They want renewal notice at 90 days, not 60."
+    },
+    {
+     "speaker": "nora",
+     "text": "And a subprocessor notice of 30 days. Residency stays EU. The Notion summary is stale."
+    },
+    {
+     "speaker": "maya",
+     "text": "Agreed. Customer legal name on the contract is Brightwave GmbH."
+    }
+   ]
+  },
+  {
+   "id": "MTG-0920",
+   "title": "Northwind expansion",
+   "date": "2026-09-20",
+   "attendees": [
+    "maya",
+    "priya"
+   ],
+   "summary": "Expanded to $3100/mo for 5 connectors. Maya approved.",
+   "transcript": [
+    {
+     "speaker": "priya",
+     "text": "They want 5 connectors. I propose $3100 a month, replacing the $2400 pilot."
+    },
+    {
+     "speaker": "maya",
+     "text": "Approved. Update the order form and the pricing page; both still show the pilot."
     }
    ]
   },
@@ -63,7 +323,7 @@
     "priya",
     "jonas"
    ],
-   "summary": "Webhooks GA moved from Oct 15 to Nov 5; signature verification (LIN-151) not started.",
+   "summary": "Webhooks GA moved from Oct 15 to Nov 5. LIN-151 has not started. Header is X-Tidepool-Signature.",
    "transcript": [
     {
      "speaker": "priya",
@@ -71,7 +331,35 @@
     },
     {
      "speaker": "maya",
-     "text": "Then GA is November 5th. Priya, please communicate."
+     "text": "Then GA is Nov 5. Priya, please communicate. The Oct 1 date was only the private beta."
+    },
+    {
+     "speaker": "jonas",
+     "text": "And the header is X-Tidepool-Signature, not X-Hub-Signature. LIN-151 and the notes still have the old name."
+    },
+    {
+     "speaker": "priya",
+     "text": "The webhooks_v2 flag stays off until Nov 5. Tom owns it."
+    }
+   ]
+  },
+  {
+   "id": "MTG-0924",
+   "title": "Offsite logistics",
+   "date": "2026-09-24",
+   "attendees": [
+    "maya",
+    "jonas"
+   ],
+   "summary": "October offsite is in Berlin. No product decisions.",
+   "transcript": [
+    {
+     "speaker": "maya",
+     "text": "Berlin, two days, no roadmap."
+    },
+    {
+     "speaker": "jonas",
+     "text": "I'll book the room."
     }
    ]
   }

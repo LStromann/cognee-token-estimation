@@ -1,0 +1,24 @@
+id: po-act-008
+topic: project_ops
+type: action
+hops: 2
+needs:
+- memory
+- mcp
+- skill
+turns:
+- Open a Linear ticket assigned to priya to update the Northwind order form. The description must contain
+  3100.
+gold: New issue assigned to priya containing 3100.
+sources:
+- MTG-0920
+- NP-7
+grader:
+  kind: state_check
+  checks:
+  - server: linear
+    collection: issues
+    created_in_run: true
+    where:
+      assignee: priya
+      description_contains: '3100'

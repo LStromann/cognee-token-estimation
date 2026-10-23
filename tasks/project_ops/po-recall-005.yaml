@@ -1,0 +1,17 @@
+id: po-recall-005
+topic: project_ops
+type: recall
+hops: 1
+needs:
+- memory
+- mcp
+turns:
+- Who is weekday on-call, who covers weekends, and who is the escalation?
+gold: Tom Okafor (tom) covers weekdays, Samir Haddad (samir) covers weekends, and escalation is Jonas
+  Weber (jonas).
+sources:
+- MTG-0912
+- NP-9
+grader:
+  kind: llm_judge
+  rubric: Pass only if all three roles are correct. Fail if Jonas is still primary.

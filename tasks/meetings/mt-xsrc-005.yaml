@@ -1,0 +1,16 @@
+id: mt-xsrc-005
+topic: meetings
+type: cross_source
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- Does the Northwind pricing page match the expansion meeting?
+gold: No. NP-7 is the $2400 pilot. MTG-0920 approved $3100 for 5 connectors.
+sources:
+- NP-7
+- MTG-0920
+grader:
+  kind: llm_judge
+  rubric: Pass if the meeting price is $3100 and the page is the pilot.

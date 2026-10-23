@@ -1,0 +1,21 @@
+id: cd-multi-001
+topic: coding
+type: multi_turn
+hops: 2
+needs:
+- memory
+- mcp
+- code
+turns:
+- Where in tenacity would we express 'exponential backoff with jitter' and a max attempt cap? Name the
+  classes.
+- Given the latest Fernhill decision, what arguments should those classes get for our sync path?
+gold: wait_random_exponential or wait_exponential_jitter, plus stop_after_attempt(4). Base delay stays
+  2s. Jitter on. Not the stale cap of 5.
+sources:
+- repo
+- mcp
+grader:
+  kind: llm_judge
+  rubric: Judge the final turn. Pass if the cap is 4, jitter is on, and a jittering tenacity wait class
+    is named.

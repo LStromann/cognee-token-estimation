@@ -2,8 +2,13 @@ id: po-ctrl-001
 topic: project_ops
 type: control
 hops: 1
-needs: [mcp]
+needs:
+- mcp
 turns:
-  - "Summarise the Notion page 'Onboarding Checklist' in 3 bullets."
-gold: "Workspace + first source; sync schedule; teammates + alerts."
-grader: {kind: llm_judge, rubric: "Pass if 3 bullets cover the 5 checklist steps without inventing steps."}
+- Summarise the Notion page 'Onboarding Checklist' in 3 bullets.
+gold: Create workspace; connect first source; configure sync schedule; invite teammates; set up alerts.
+sources:
+- named page
+grader:
+  kind: llm_judge
+  rubric: Pass if the bullets cover all 5 checklist steps and do not invent extra steps.

@@ -1,0 +1,16 @@
+id: mt-temp-007
+topic: meetings
+type: temporal
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- What is the current webhook signature header?
+gold: X-Tidepool-Signature, confirmed by Jonas in the launch review. X-Hub-Signature is stale.
+sources:
+- MTG-0923
+- NP-19
+grader:
+  kind: llm_judge
+  rubric: Pass for X-Tidepool-Signature. Fail for X-Hub-Signature.

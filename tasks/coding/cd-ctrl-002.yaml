@@ -1,0 +1,16 @@
+id: cd-ctrl-002
+topic: coding
+type: control
+hops: 1
+needs:
+- skill
+turns:
+- From the team-conventions skill, what is the maximum length of a Linear title, and how many lines is
+  a Slack update?
+gold: 'Linear titles are imperative and under 70 characters. Slack updates are at most 3 lines: what changed,
+  why, who to ask.'
+sources:
+- named
+grader:
+  kind: llm_judge
+  rubric: Pass if both the 70-character title rule and the 3-line Slack rule are present.

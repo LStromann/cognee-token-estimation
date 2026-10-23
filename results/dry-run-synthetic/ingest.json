@@ -1,0 +1,101 @@
+{
+ "coding": {
+  "baseline": {
+   "claude": {
+    "input_tokens": 1028,
+    "output_tokens": 384,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "requests": 32,
+    "usage_missing": 0,
+    "total": 1412
+   }
+  },
+  "cognee": {
+   "claude": {
+    "input_tokens": 1177,
+    "output_tokens": 160,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 1177,
+    "requests": 16,
+    "usage_missing": 0,
+    "total": 2514
+   },
+   "cognee": {
+    "input_tokens": 311,
+    "output_tokens": 204,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "requests": 17,
+    "usage_missing": 0,
+    "total": 515
+   }
+  }
+ },
+ "project_ops": {
+  "baseline": {
+   "claude": {
+    "input_tokens": 1048,
+    "output_tokens": 384,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "requests": 32,
+    "usage_missing": 0,
+    "total": 1432
+   }
+  },
+  "cognee": {
+   "claude": {
+    "input_tokens": 1182,
+    "output_tokens": 160,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 1182,
+    "requests": 16,
+    "usage_missing": 0,
+    "total": 2524
+   },
+   "cognee": {
+    "input_tokens": 311,
+    "output_tokens": 204,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "requests": 17,
+    "usage_missing": 0,
+    "total": 515
+   }
+  }
+ },
+ "meetings": {
+  "baseline": {
+   "claude": {
+    "input_tokens": 976,
+    "output_tokens": 384,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "requests": 32,
+    "usage_missing": 0,
+    "total": 1360
+   }
+  },
+  "cognee": {
+   "claude": {
+    "input_tokens": 1164,
+    "output_tokens": 160,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 1164,
+    "requests": 16,
+    "usage_missing": 0,
+    "total": 2488
+   },
+   "cognee": {
+    "input_tokens": 311,
+    "output_tokens": 204,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "requests": 17,
+    "usage_missing": 0,
+    "total": 515
+   }
+  }
+ }
+}

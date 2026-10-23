@@ -1,0 +1,17 @@
+id: po-xsrc-004
+topic: project_ops
+type: cross_source
+hops: 3
+needs:
+- memory
+- mcp
+turns:
+- Is the Northwind price on the pricing page the price we are billing now?
+gold: No. Notion NP-7 still shows $2400/mo for 3 connectors. The approved price is $3100/mo for 5 connectors.
+sources:
+- NP-7
+- MTG-0920
+- C04
+grader:
+  kind: llm_judge
+  rubric: Pass if the current price is $3100 and 5 connectors, and the page is identified as stale.

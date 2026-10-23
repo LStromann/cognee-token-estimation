@@ -1,0 +1,18 @@
+id: cd-fix-008
+topic: coding
+type: code_fix
+hops: 2
+needs:
+- memory
+- mcp
+- code
+turns:
+- Set BACKOFF in tidepool_sync/retry_policy.py to exponential+jitter, matching the latest decision rather
+  than plain exponential.
+gold: BACKOFF is exponential+jitter.
+sources:
+- MTG-0916
+grader:
+  kind: tests
+  hidden_tests: tasks/coding/hidden/cd-fix-008
+  command: python3 -m pytest -q tests/hidden --rootdir=. --override-ini=pythonpath=. -p no:cacheprovider

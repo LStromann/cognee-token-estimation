@@ -1,0 +1,24 @@
+id: po-act-004
+topic: project_ops
+type: action
+hops: 2
+needs:
+- memory
+- mcp
+- skill
+turns:
+- 'Post a Slack message in #legal (channel id C07) stating the current Brightwave renewal notice. Include
+  the exact phrase ''90 days''. Do not change Notion.'
+gold: 'A new #legal message containing ''90 days''.'
+sources:
+- C07
+- MTG-0919
+grader:
+  kind: state_check
+  checks:
+  - server: slack
+    collection: messages
+    created_in_run: true
+    where:
+      channel: C07
+      text_contains: 90 days

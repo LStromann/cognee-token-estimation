@@ -1,0 +1,14 @@
+id: mt-ctrl-001
+topic: meetings
+type: control
+hops: 1
+needs:
+- mcp
+turns:
+- Summarise the Granola meeting MTG-0902. Name the cap they agreed that day.
+gold: 'Eng sync on 2026-09-02: exponential backoff, base 2s, max 5 retries. Priya owns the spec.'
+sources:
+- named source
+grader:
+  kind: llm_judge
+  rubric: Pass if the summary is about MTG-0902 and the cap that day is 5. Do not require the later change.

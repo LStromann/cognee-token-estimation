@@ -1,0 +1,16 @@
+id: mt-xsrc-002
+topic: meetings
+type: cross_source
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- Does the launch plan match the launch review?
+gold: No. NP-2 still says Oct 15. MTG-0923 moved GA to Nov 5 because LIN-151 has not started.
+sources:
+- NP-2
+- MTG-0923
+grader:
+  kind: llm_judge
+  rubric: Pass if GA is Nov 5 and the plan is stale.

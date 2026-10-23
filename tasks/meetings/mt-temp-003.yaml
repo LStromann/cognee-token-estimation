@@ -1,0 +1,18 @@
+id: mt-temp-003
+topic: meetings
+type: temporal
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- Are we building active-active regions?
+gold: No. MTG-0918 rejected active-active multi-region writes. Build eu-central-1 with a warm standby
+  in eu-west-1.
+sources:
+- MTG-0918
+- MTG-0909
+- NP-4
+grader:
+  kind: llm_judge
+  rubric: Pass if active-active is rejected and both regions are named with the right roles.

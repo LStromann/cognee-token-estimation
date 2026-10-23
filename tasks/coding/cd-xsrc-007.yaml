@@ -1,0 +1,19 @@
+id: cd-xsrc-007
+topic: coding
+type: cross_source
+hops: 2
+needs:
+- memory
+- mcp
+- code
+turns:
+- Which parts of the Notion retry spec still match tidepool_sync/retry_policy.py, and which parts are
+  both wrong?
+gold: Both still have max 5, no jitter, and no idempotency header, from MTG-0902. The base of 2s matches
+  and is still correct. The cap, jitter, and header are wrong together.
+sources:
+- overlay
+- mcp
+grader:
+  kind: llm_judge
+  rubric: Pass if base 2s is the part that still holds and the cap of 5 is wrong.

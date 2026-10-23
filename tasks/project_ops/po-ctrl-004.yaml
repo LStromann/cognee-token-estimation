@@ -1,0 +1,14 @@
+id: po-ctrl-004
+topic: project_ops
+type: control
+hops: 1
+needs:
+- mcp
+turns:
+- From the Notion page 'Incident Severity', which severity was INC-19, and what does that severity mean?
+gold: 'INC-19 was SEV-2: a single customer''s sync is halted.'
+sources:
+- named page
+grader:
+  kind: llm_judge
+  rubric: Pass if it says SEV-2 and the single-customer meaning. Fail if it says SEV-1.

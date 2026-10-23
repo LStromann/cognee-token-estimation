@@ -1,15 +1,27 @@
 topic: project_ops
+# Operational memory across Linear, Notion, Slack, GitHub, and Granola. Do not ask the eval questions.
 sessions:
   - id: w1
     turns:
-      - "Catch me up on the sync retry work: what was decided, which ticket tracks it, and where's the spec?"
+      - "Catch me up on Sync Reliability. Which project is it, who leads it, and which Linear issue and pull request still describe the original retry cap?"
   - id: w2
     turns:
-      - "What's going on with Brightwave? Check support, Linear and GitHub."
-      - "Who is on it and what's the suspected cause?"
+      - "Read the Brightwave support thread, LIN-155, and GitHub #88. What symptom did Lea report, and which later note says the idempotency key must stay stable across attempts?"
   - id: w3
     turns:
-      - "Give me a status of the Webhooks GA project from Linear and the launch plan."
+      - "Status of Webhooks GA from the project, the launch plan, and #launch. Separate the private-beta date from the general-availability date, and name the signature-verification ticket."
   - id: w4
     turns:
-      - "Read #eng and #launch from the last two weeks and tell me anything that changes our plans."
+      - "Read #eng and #infra from September. What did the infra review decide about regions, and what did it reject? What is the Redis timeline?"
+  - id: w5
+    turns:
+      - "Open the Brightwave MSA summary and the 19 September legal meeting. List liability cap, renewal notice, subprocessor notice, and residency, and mark which Notion lines are older than the meeting."
+  - id: w6
+    turns:
+      - "Northwind pricing: compare the 5 September pilot note with the 20 September approval. Who approved the current figure, and how many connectors does it include?"
+  - id: w7
+    turns:
+      - "Security program, on-call, retention, and the backend hiring note. For each, say which page is current and which page still has the earlier wording. Include INC-19 only as background."
+  - id: w8
+    turns:
+      - "Skim #product and the brand workshop notes, then write a CLAUDE.md memory of decisions that later sessions should treat as current: retry cap, GA date, infra shape, MSA notice periods, and the feature flag default."

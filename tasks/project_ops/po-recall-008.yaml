@@ -1,0 +1,16 @@
+id: po-recall-008
+topic: project_ops
+type: recall
+hops: 1
+needs:
+- memory
+- mcp
+turns:
+- Who owns the webhooks_v2 flag, and what is its default?
+gold: webhooks_v2 is owned by Tom Okafor and defaults to off.
+sources:
+- LIN-180
+- MTG-0923
+grader:
+  kind: llm_judge
+  rubric: Pass if the owner is Tom and the default is off.

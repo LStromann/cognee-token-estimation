@@ -1,0 +1,15 @@
+id: cd-qa-006
+topic: coding
+type: codebase_qa
+hops: 1
+needs:
+- code
+turns:
+- What is stop_never, and is it a class you instantiate?
+gold: stop_never is a singleton instance of _stop_never in tenacity/stop.py. Calling it always returns
+  False.
+sources:
+- tenacity
+grader:
+  kind: llm_judge
+  rubric: Pass if it says stop_never is a singleton (not something you construct) and it never stops.

@@ -51,17 +51,73 @@ Assistant's final answer:
 Reply with JSON only: {{"pass": true|false, "reason": "<one sentence>"}}"""
 
 
+def _judge_prompt(task, answer):
+    return JUDGE.format(
+        prompt=" / ".join(task["turns"]), gold=task.get("gold", ""),
+        rubric=task["grader"].get("rubric", "Pass if consistent with the reference."), answer=answer)
+
+
+def _parse_verdict(text):
+    m = re.search(r"\{.*\}", text, re.S)
+    try:
+        v = json.loads(m.group(0))
+        return {"success": bool(v.get("pass")), "grade_reason": v.get("reason", ""), "error": None}
+    except Exception:
+        return {"success": False, "grade_reason": f"judge parse error: {text[:200]}", "error": None}
+
+
 def llm_judge(task, answer, judge_model, base_url=None):
     import anthropic
     msg = anthropic.Anthropic(base_url=base_url).messages.create(
         model=judge_model, max_tokens=300,
-        messages=[{"role": "user", "content": JUDGE.format(
-            prompt=" / ".join(task["turns"]), gold=task.get("gold", ""),
-            rubric=task["grader"].get("rubric", "Pass if consistent with the reference."), answer=answer)}])
+        messages=[{"role": "user", "content": _judge_prompt(task, answer)}])
     text = "".join(b.text for b in msg.content if b.type == "text")
-    m = re.search(r"\{.*\}", text, re.S)
+    parsed = _parse_verdict(text)
+    return {"success": parsed["success"], "grade_reason": parsed["grade_reason"]}
+
+
+def _openai_url(base):
+    base = base.rstrip("/")
+    if base.endswith("/v1"):
+        return base + "/chat/completions"
+    return base + "/v1/chat/completions"
+
+
+def secondary_judge(task, answer, spec, direct_base=None):
+    """Second grader from another model family. None when disabled.
+
+    A transport or parse failure is recorded as error and is not a disagreement:
+    only two successful verdicts that differ raise judge_disagreement.
+    """
+    if not spec or not spec.get("enabled", False):
+        return None
+    if task.get("grader", {}).get("kind") != "llm_judge":
+        return None
+    prompt = _judge_prompt(task, answer)
+    model = spec.get("model") or "gpt-4.1-mini"
     try:
-        v = json.loads(m.group(0))
-        return {"success": bool(v.get("pass")), "grade_reason": v.get("reason", "")}
-    except Exception:
-        return {"success": False, "grade_reason": f"judge parse error: {text[:200]}"}
+        if spec.get("provider", "openai") == "anthropic":
+            import anthropic
+            msg = anthropic.Anthropic(base_url=spec.get("base_url") or direct_base).messages.create(
+                model=model, max_tokens=300, messages=[{"role": "user", "content": prompt}])
+            text = "".join(b.text for b in msg.content if b.type == "text")
+        else:
+            import os
+            import urllib.request
+            key = os.environ.get(spec.get("api_key_env") or "OPENAI_API_KEY", "")
+            if not key:
+                return {"success": None, "reason": "", "error": f"{spec.get('api_key_env') or 'OPENAI_API_KEY'} is unset"}
+            body = json.dumps({"model": model, "messages": [{"role": "user", "content": prompt}],
+                               "max_tokens": 300}).encode()
+            req = urllib.request.Request(
+                _openai_url(spec.get("base_url") or "https://api.openai.com/v1"), data=body,
+                headers={"content-type": "application/json", "authorization": f"Bearer {key}"})
+            with urllib.request.urlopen(req, timeout=float(spec.get("timeout_s") or 60)) as resp:
+                payload = json.loads(resp.read().decode())
+            text = payload["choices"][0]["message"]["content"]
+    except Exception as exc:
+        return {"success": None, "reason": "", "error": f"{type(exc).__name__}: {exc}"}
+    parsed = _parse_verdict(text)
+    if parsed["grade_reason"].startswith("judge parse error"):
+        return {"success": None, "reason": parsed["grade_reason"], "error": parsed["grade_reason"]}
+    return {"success": parsed["success"], "reason": parsed["grade_reason"], "error": None}

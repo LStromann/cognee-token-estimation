@@ -1,0 +1,17 @@
+id: mt-xsrc-012
+topic: meetings
+type: cross_source
+hops: 3
+needs:
+- memory
+- mcp
+turns:
+- The infra decision kept Redis on Render for a while. Which ticket still says to move it immediately?
+gold: LIN-183 says move Redis this week. MTG-0918 keeps Redis on Render until 2026-11-30, then ElastiCache.
+sources:
+- LIN-183
+- MTG-0918
+- C05
+grader:
+  kind: llm_judge
+  rubric: Pass if LIN-183 is stale and the date is 2026-11-30.

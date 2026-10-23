@@ -1,0 +1,17 @@
+id: mt-xsrc-011
+topic: meetings
+type: cross_source
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- Do the incident postmortem and the bridge transcript agree on severity and cause?
+gold: Yes. Both say INC-19 was SEV-2 for Brightwave because of a retry storm. The postmortem notes the
+  formal cap change was still open that day.
+sources:
+- NP-12
+- MTG-0914
+grader:
+  kind: llm_judge
+  rubric: Pass if severity SEV-2, Brightwave, and retry storm are all present.

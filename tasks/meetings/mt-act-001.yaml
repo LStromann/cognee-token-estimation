@@ -1,0 +1,23 @@
+id: mt-act-001
+topic: meetings
+type: action
+hops: 2
+needs:
+- memory
+- mcp
+- skill
+turns:
+- 'Send a Slack message to #support (C03) explaining the current retry rule for Brightwave. The message
+  must contain both ''4'' and ''jitter''.'
+gold: 'A new #support message containing 4 and jitter.'
+sources:
+- MTG-0916
+grader:
+  kind: state_check
+  checks:
+  - server: slack
+    collection: messages
+    created_in_run: true
+    where:
+      channel: C03
+      text_contains: jitter

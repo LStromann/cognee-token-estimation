@@ -1,0 +1,16 @@
+id: cd-qa-012
+topic: coding
+type: codebase_qa
+hops: 2
+needs:
+- code
+turns:
+- Where is retry_if_exception_type defined, and what does it retry on?
+gold: Class retry_if_exception_type in tenacity/retry.py. It subclasses retry_if_exception and retries
+  when the outcome failed with an exception that is an instance of the given type or types (default Exception).
+sources:
+- tenacity
+grader:
+  kind: llm_judge
+  rubric: Pass if the file is tenacity/retry.py and the condition is isinstance of the configured exception
+    types.

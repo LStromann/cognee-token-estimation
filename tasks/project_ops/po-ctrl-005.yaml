@@ -1,0 +1,14 @@
+id: po-ctrl-005
+topic: project_ops
+type: control
+hops: 1
+needs:
+- mcp
+turns:
+- Quote the purpose of support macro DUP-1 from the Support Macros page.
+gold: Acknowledge the duplicate records, ask for the sync run id, and do not promise a refund.
+sources:
+- named page
+grader:
+  kind: llm_judge
+  rubric: Pass if all three instructions are present. Fail if a refund is promised.

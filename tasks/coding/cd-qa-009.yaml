@@ -1,0 +1,15 @@
+id: cd-qa-009
+topic: coding
+type: codebase_qa
+hops: 1
+needs:
+- code
+turns:
+- Where does a caller import the public retry decorator from?
+gold: tenacity/__init__.py re-exports retry and Retrying. The decorator is the public entry point of the
+  package, not a class buried only in wait.py or stop.py.
+sources:
+- tenacity
+grader:
+  kind: llm_judge
+  rubric: Pass if it points at tenacity/__init__.py (or `from tenacity import retry`).

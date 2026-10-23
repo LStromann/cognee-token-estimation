@@ -1,0 +1,15 @@
+id: cd-qa-010
+topic: coding
+type: codebase_qa
+hops: 1
+needs:
+- code
+turns:
+- Where is before_sleep_log defined, and what does it log?
+gold: tenacity/before_sleep.py. before_sleep_log(logger, log_level, exc_info=False, sec_format='%.3g')
+  returns a callback that logs 'Retrying {fn} in {seconds} seconds as it raised/returned {value}'.
+sources:
+- tenacity
+grader:
+  kind: llm_judge
+  rubric: Pass if the file is tenacity/before_sleep.py and the log line includes the sleep and the outcome.

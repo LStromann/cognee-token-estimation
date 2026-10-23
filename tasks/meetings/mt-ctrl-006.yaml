@@ -1,0 +1,15 @@
+id: mt-ctrl-006
+topic: meetings
+type: control
+hops: 1
+needs:
+- mcp
+turns:
+- From the Incident Severity page, define SEV-1 and SEV-3.
+gold: SEV-1 is customer data corruption or a full-product outage. SEV-3 is degraded retries while sync
+  still completes.
+sources:
+- named source
+grader:
+  kind: llm_judge
+  rubric: Pass if both definitions are present and not swapped.

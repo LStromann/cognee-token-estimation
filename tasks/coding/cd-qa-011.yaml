@@ -1,0 +1,15 @@
+id: cd-qa-011
+topic: coding
+type: codebase_qa
+hops: 1
+needs:
+- code
+turns:
+- What sleep helpers does tenacity/nap.py provide?
+gold: sleep(seconds) calls time.sleep and is the default strategy, meant to be mocked in tests. sleep_using_event(event)
+  waits on a threading.Event and may return early if the event is set.
+sources:
+- tenacity
+grader:
+  kind: llm_judge
+  rubric: Pass if both sleep and sleep_using_event are described.

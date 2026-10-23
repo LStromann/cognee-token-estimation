@@ -1,0 +1,24 @@
+id: po-act-002
+topic: project_ops
+type: action
+hops: 2
+needs:
+- memory
+- mcp
+- skill
+turns:
+- Open a Linear ticket assigned to the infra lead (user id samir) to replace the active-active plan. The
+  description must contain the word standby and the standby region.
+gold: New issue assigned to samir describing a warm standby in eu-west-1.
+sources:
+- MTG-0918
+- LIN-170
+grader:
+  kind: state_check
+  checks:
+  - server: linear
+    collection: issues
+    created_in_run: true
+    where:
+      assignee: samir
+      description_contains: standby

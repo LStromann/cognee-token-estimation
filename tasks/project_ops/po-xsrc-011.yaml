@@ -1,0 +1,18 @@
+id: po-xsrc-011
+topic: project_ops
+type: cross_source
+hops: 3
+needs:
+- memory
+- mcp
+turns:
+- Does the open terraform PR match the infra decision, including Redis?
+gold: 'No. PR #102 does active-active multi-region writes and moves Redis immediately. The decision is
+  eu-central-1 plus warm standby eu-west-1, and Redis stays on Render until 2026-11-30.'
+sources:
+- PR-102
+- MTG-0918
+- LIN-183
+grader:
+  kind: llm_judge
+  rubric: Pass if both the region design and the Redis timing are called out as wrong on the PR.

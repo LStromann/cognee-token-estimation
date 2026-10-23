@@ -1,0 +1,15 @@
+id: cd-ctrl-003
+topic: coding
+type: control
+hops: 1
+needs:
+- mcp
+turns:
+- Summarise GitHub issue 88 in two sentences. Use the mock GitHub tools.
+gold: Brightwave sees duplicate records after a failed sync. It points at LIN-155 and says the idempotency
+  key includes the attempt.
+sources:
+- named
+grader:
+  kind: llm_judge
+  rubric: Pass if duplicates, Brightwave or the failed sync, and the attempt-in-key cause are present.

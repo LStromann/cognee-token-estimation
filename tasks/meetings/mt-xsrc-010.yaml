@@ -1,0 +1,18 @@
+id: mt-xsrc-010
+topic: meetings
+type: cross_source
+hops: 3
+needs:
+- memory
+- mcp
+turns:
+- After the launch review, which signature header did Jonas confirm, and which ticket still has the old
+  one?
+gold: 'Jonas confirmed X-Tidepool-Signature in the review and in #launch. LIN-151 still says X-Hub-Signature.'
+sources:
+- MTG-0923
+- LIN-151
+- C02
+grader:
+  kind: llm_judge
+  rubric: Pass if X-Tidepool-Signature is current and LIN-151 is the stale ticket.

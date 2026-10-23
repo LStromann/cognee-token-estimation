@@ -1,0 +1,18 @@
+id: po-xsrc-003
+topic: project_ops
+type: cross_source
+hops: 3
+needs:
+- memory
+- mcp
+turns:
+- Is the infra ticket's region design the one we are actually building?
+gold: 'No. LIN-170 and PR #102 still say active-active multi-region writes. The decision is a single region
+  eu-central-1 with a warm standby in eu-west-1.'
+sources:
+- LIN-170
+- PR-102
+- MTG-0918
+grader:
+  kind: llm_judge
+  rubric: Pass if it rejects active-active writes and names eu-central-1 plus standby eu-west-1.

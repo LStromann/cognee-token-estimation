@@ -1,0 +1,16 @@
+id: mt-xsrc-001
+topic: meetings
+type: cross_source
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- Does the written retry spec match the latest eng sync?
+gold: No. NP-1 still says max 5 and no jitter from MTG-0902. MTG-0916 set max 4 with jitter.
+sources:
+- NP-1
+- MTG-0916
+grader:
+  kind: llm_judge
+  rubric: Pass if the spec is stale and the meeting decision is 4 with jitter.

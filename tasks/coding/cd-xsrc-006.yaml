@@ -1,0 +1,19 @@
+id: cd-xsrc-006
+topic: coding
+type: cross_source
+hops: 3
+needs:
+- memory
+- mcp
+- code
+turns:
+- 'GitHub #88 and PR #110 describe the idempotency key. Does the overlay implement what they describe,
+  and is that what we want?'
+gold: 'Yes, the overlay matches them: the attempt is part of the key. That is not what we want. The key
+  must be stable, header name Idempotency-Key.'
+sources:
+- overlay
+- mcp
+grader:
+  kind: llm_judge
+  rubric: Pass if the code matches the stale PR and the desired behavior is a stable key.

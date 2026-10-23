@@ -1,0 +1,17 @@
+id: po-xsrc-012
+topic: project_ops
+type: cross_source
+hops: 3
+needs:
+- memory
+- mcp
+turns:
+- When does the webhooks flag turn on, and which writeups still have the old date?
+gold: webhooks_v2 stays off until Nov 5. LIN-180 and NP-18 still say Oct 15. Tom owns the flag.
+sources:
+- LIN-180
+- NP-18
+- MTG-0923
+grader:
+  kind: llm_judge
+  rubric: Pass if the flag stays off until Nov 5 and the October date is stale.

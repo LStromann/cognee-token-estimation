@@ -1,0 +1,23 @@
+id: mt-act-005
+topic: meetings
+type: action
+hops: 2
+needs:
+- memory
+- mcp
+- skill
+turns:
+- Create a Notion page titled 'Decision log 0916' whose content contains the word jitter and the current
+  retry cap.
+gold: A new Notion page titled Decision log 0916 whose body contains jitter.
+sources:
+- MTG-0916
+grader:
+  kind: state_check
+  checks:
+  - server: notion
+    collection: pages
+    created_in_run: true
+    where:
+      title_contains: Decision log 0916
+      content_contains: jitter
