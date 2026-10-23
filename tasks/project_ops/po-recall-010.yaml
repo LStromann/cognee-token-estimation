@@ -1,0 +1,16 @@
+id: po-recall-010
+topic: project_ops
+type: recall
+hops: 1
+needs:
+- memory
+- mcp
+turns:
+- Who is the backend contractor backfill, for how long, and when do they start? Who declined?
+gold: Rina Sol declined. Oleg Petrov contracts for 3 months starting 2026-10-06.
+sources:
+- NP-11
+- C04
+grader:
+  kind: llm_judge
+  rubric: Pass if it names Oleg Petrov, 3 months, 2026-10-06, and that Rina Sol declined.

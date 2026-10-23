@@ -1,0 +1,18 @@
+id: cd-temp-003
+topic: coding
+type: temporal
+hops: 2
+needs:
+- memory
+- mcp
+- code
+turns:
+- Which signature header should tidepool_sync send today?
+gold: X-Tidepool-Signature. The code and LIN-151 and NP-19 still say X-Hub-Signature. Jonas corrected
+  it at the launch review.
+sources:
+- overlay
+- meetings
+grader:
+  kind: llm_judge
+  rubric: Pass if the header is X-Tidepool-Signature.

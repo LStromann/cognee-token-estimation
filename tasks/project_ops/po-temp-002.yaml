@@ -1,0 +1,18 @@
+id: po-temp-002
+topic: project_ops
+type: temporal
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- What is the current sync retry cap, and is jitter on?
+gold: Max 4 retries with jitter, base still 2s, decided 2026-09-16. A cap of 3 was rejected. The spec
+  and LIN-142 still say 5 and no jitter.
+sources:
+- MTG-0916
+- NP-1
+- LIN-149
+grader:
+  kind: llm_judge
+  rubric: Pass if the current cap is 4 and jitter is on. Fail if the answer is 5 or 3.

@@ -5,21 +5,140 @@
    "title": "Sync Retry Policy v2",
    "owner": "priya",
    "last_edited": "2026-09-03",
-   "content": "Policy: exponential backoff, base 2s, max 5 retries. Decision: eng sync 2026-09-02."
+   "content": "Policy: exponential backoff, base 2s, max 5 retries. No jitter.\nIdempotency: not specified.\nDecision source: eng sync 2026-09-02 (MTG-0902).\nOwner: Priya Nair.\n"
   },
   {
    "id": "NP-2",
    "title": "Webhooks GA Launch Plan",
    "owner": "priya",
    "last_edited": "2026-09-10",
-   "content": "Launch date: Oct 15. Scope: delivery retries, signature verification (LIN-151), docs (LIN-160)."
+   "content": "Launch date: Oct 15.\nScope: delivery retries, signature verification (LIN-151), docs (LIN-160).\nSignature header: X-Hub-Signature.\n"
   },
   {
    "id": "NP-3",
    "title": "Onboarding Checklist",
    "owner": "lea",
    "last_edited": "2026-08-20",
-   "content": "1. Create workspace. 2. Connect first source. 3. Configure sync schedule. 4. Invite teammates. 5. Set up alerts."
+   "content": "1. Create workspace.\n2. Connect first source.\n3. Configure sync schedule.\n4. Invite teammates.\n5. Set up alerts.\n"
+  },
+  {
+   "id": "NP-4",
+   "title": "Infra Redesign",
+   "owner": "samir",
+   "last_edited": "2026-09-09",
+   "content": "Decision draft from the 2026-09-09 design review: active-active multi-region writes.\nRedis: move off Render immediately, in the same change window.\nPrimary region named in the draft: eu-central-1.\n"
+  },
+  {
+   "id": "NP-5",
+   "title": "Brand Values",
+   "owner": "hana",
+   "last_edited": "2026-08-28",
+   "content": "Working values: Move fast, Move fast, sync faster.\nTagline in market: Sync that stays in its lane.\nThis page was last edited before the September workshop.\n"
+  },
+  {
+   "id": "NP-6",
+   "title": "Brightwave MSA Summary",
+   "owner": "nora",
+   "last_edited": "2026-09-12",
+   "content": "Customer: Brightwave GmbH.\nLiability cap: 12 months of fees.\nRenewal notice: 60 days.\nData residency: EU.\nSubprocessor notice: not in the draft.\n"
+  },
+  {
+   "id": "NP-7",
+   "title": "Pricing — Northwind",
+   "owner": "priya",
+   "last_edited": "2026-09-05",
+   "content": "Northwind pilot: $2400 per month, 3 connectors included.\nApproved at the 2026-09-05 pricing chat.\n"
+  },
+  {
+   "id": "NP-8",
+   "title": "Security Program",
+   "owner": "samir",
+   "last_edited": "2026-09-01",
+   "content": "SOC 2 tool: still evaluating Drata. No vendor chosen on this page.\nOwner of the evaluation: Samir Haddad.\n"
+  },
+  {
+   "id": "NP-9",
+   "title": "On-call Rotation",
+   "owner": "jonas",
+   "last_edited": "2026-08-15",
+   "content": "Primary: Jonas Weber, all week.\nEscalation: Maya Chen.\nWeekday and weekend are not split on this page.\n"
+  },
+  {
+   "id": "NP-10",
+   "title": "Privacy and Retention",
+   "owner": "nora",
+   "last_edited": "2026-08-01",
+   "content": "Sync logs are retained for 90 days.\nCustomer content follows the MSA residency clause.\n"
+  },
+  {
+   "id": "NP-11",
+   "title": "Hiring — Backend",
+   "owner": "priya",
+   "last_edited": "2026-09-07",
+   "content": "Offer status: Rina Sol accepted. Start date to be scheduled.\nNo contractor backfill is listed.\n"
+  },
+  {
+   "id": "NP-12",
+   "title": "Incident INC-19 Postmortem",
+   "owner": "lea",
+   "last_edited": "2026-09-15",
+   "content": "INC-19 on 2026-09-14. Severity SEV-2. Customer Brightwave.\nCause: a retry storm after a failed sync was retried without idempotency.\nMitigation that day: support asked engineering to lower the retry cap. The formal policy change was still open when this note was written.\nLinear: LIN-155. GitHub: #88.\n"
+  },
+  {
+   "id": "NP-13",
+   "title": "Team Directory",
+   "owner": "maya",
+   "last_edited": "2026-09-01",
+   "content": "Maya Chen — CEO (maya).\nJonas Weber — Eng Lead (jonas).\nPriya Nair — PM (priya).\nTom Okafor — Backend (tom).\nLea Fischer — Support Lead (lea).\nNora Berg — Legal (nora).\nSamir Haddad — Infra (samir).\nHana Ito — Design (hana).\n"
+  },
+  {
+   "id": "NP-14",
+   "title": "Glossary",
+   "owner": "priya",
+   "last_edited": "2026-08-12",
+   "content": "Tidepool: Fernhill Labs' data-sync product.\nSync run: one pass over a connector.\nIdempotency-Key: the header that makes POST /sync safe to retry.\nGA: general availability, as opposed to a private beta.\nWarm standby: a second region that can take traffic but does not serve writes in normal operation.\n"
+  },
+  {
+   "id": "NP-15",
+   "title": "Incident Severity",
+   "owner": "lea",
+   "last_edited": "2026-08-12",
+   "content": "SEV-1: customer data corruption, or a full-product outage.\nSEV-2: a single customer's sync is halted.\nSEV-3: retries are degraded but sync still completes.\nINC-19 was declared SEV-2.\n"
+  },
+  {
+   "id": "NP-16",
+   "title": "Support Macros",
+   "owner": "lea",
+   "last_edited": "2026-08-18",
+   "content": "DUP-1: Acknowledge the duplicate records, ask for the sync run id, and do not promise a refund.\nLIMIT-1: Tell the customer we are spacing retries, and that engineering owns the cap.\n"
+  },
+  {
+   "id": "NP-17",
+   "title": "Release Checklist",
+   "owner": "priya",
+   "last_edited": "2026-08-18",
+   "content": "1. Feature flag default reviewed.\n2. Docs page updated.\n3. Support macro ready.\n4. Launch-review note posted in #launch.\n"
+  },
+  {
+   "id": "NP-18",
+   "title": "Flag Registry",
+   "owner": "tom",
+   "last_edited": "2026-09-10",
+   "content": "webhooks_v2: owner tom, default off until the Webhooks launch date printed on the launch plan (Oct 15).\n"
+  },
+  {
+   "id": "NP-19",
+   "title": "Webhook Signature Notes",
+   "owner": "tom",
+   "last_edited": "2026-09-10",
+   "content": "Sign webhook bodies with HMAC-SHA256.\nHeader name: X-Hub-Signature.\nLinear: LIN-151.\n"
+  },
+  {
+   "id": "NP-20",
+   "title": "Q2 Retro Notes",
+   "owner": "maya",
+   "last_edited": "2026-08-20",
+   "content": "We shipped the first connector and hired support. No retry, pricing, or infra decisions were made in this retro.\nAction: schedule a September planning cycle.\n"
   }
  ]
 }

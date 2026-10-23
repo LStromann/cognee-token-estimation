@@ -1,0 +1,15 @@
+id: mt-recall-003
+topic: meetings
+type: recall
+hops: 1
+needs:
+- memory
+- mcp
+turns:
+- What three brand values did the workshop lock, and who named them?
+gold: Maya named Clear water, Honest sync, No dark patterns. Hana ran the workshop (MTG-0911).
+sources:
+- MTG-0911
+grader:
+  kind: llm_judge
+  rubric: Pass if all three values are present and attributed to that workshop.

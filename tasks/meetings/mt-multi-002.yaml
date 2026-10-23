@@ -1,0 +1,18 @@
+id: mt-multi-002
+topic: meetings
+type: multi_turn
+hops: 2
+needs:
+- memory
+- mcp
+- skill
+turns:
+- What did the brand workshop decide?
+- Draft a 4-line values blurb Hana can paste into Notion. Don't edit Notion.
+gold: Values Clear water, Honest sync, No dark patterns. Tagline 'Sync that stays in its lane.'. Rejected
+  'Move fast, sync faster'.
+sources:
+- story
+grader:
+  kind: llm_judge
+  rubric: Judge the final turn. Pass if all three values and the kept tagline are in the blurb.

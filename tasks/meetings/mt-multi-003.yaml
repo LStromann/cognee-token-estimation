@@ -1,0 +1,18 @@
+id: mt-multi-003
+topic: meetings
+type: multi_turn
+hops: 2
+needs:
+- memory
+- mcp
+- skill
+turns:
+- What did the launch review change about Webhooks GA?
+- 'Draft the #launch announcement. Don''t send it. Include the new date and what blocked the old one.'
+gold: GA is Nov 5, moved from Oct 15 because LIN-151 has not started.
+sources:
+- story
+grader:
+  kind: llm_judge
+  rubric: Judge the final turn. Pass if Nov 5 is the date and LIN-151 or signature verification is the
+    blocker.

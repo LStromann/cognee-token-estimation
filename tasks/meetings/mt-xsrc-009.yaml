@@ -1,0 +1,16 @@
+id: mt-xsrc-009
+topic: meetings
+type: cross_source
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- The latest eng sync required a header on POST /sync. Does the retry spec mention it?
+gold: The sync required Idempotency-Key on POST /sync. NP-1 says idempotency is not specified.
+sources:
+- NP-1
+- MTG-0916
+grader:
+  kind: llm_judge
+  rubric: Pass if the header is Idempotency-Key and the spec is missing it.

@@ -1,0 +1,15 @@
+id: mt-recall-005
+topic: meetings
+type: recall
+hops: 1
+needs:
+- memory
+- mcp
+turns:
+- Which SOC 2 product did the security-tools meeting choose?
+gold: Vanta, on 2026-09-08. Drata was rejected. Samir owns it.
+sources:
+- MTG-0908
+grader:
+  kind: llm_judge
+  rubric: Pass if the choice is Vanta.

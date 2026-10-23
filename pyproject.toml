@@ -2,7 +2,11 @@
 name = "cognee-token-bench"
 version = "0.1.0"
 requires-python = ">=3.10"
-dependencies = ["mcp>=1.2,<3", "pyyaml", "anthropic", "pandas", "numpy", "tabulate", "aiohttp"]
+dependencies = ["mcp>=1.2,<3", "pyyaml", "anthropic", "pandas", "numpy", "tabulate", "aiohttp", "pytest"]
 
 [tool.setuptools]
 packages = ["harness", "mcp_mocks", "analysis"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

@@ -1,0 +1,18 @@
+id: cd-fix-005
+topic: coding
+type: code_fix
+hops: 2
+needs:
+- memory
+- mcp
+- code
+turns:
+- Set IDEMPOTENCY_HEADER in tidepool_sync/retry_policy.py to the header name the latest eng sync required
+  on POST /sync.
+gold: IDEMPOTENCY_HEADER is Idempotency-Key.
+sources:
+- MTG-0916
+grader:
+  kind: tests
+  hidden_tests: tasks/coding/hidden/cd-fix-005
+  command: python3 -m pytest -q tests/hidden --rootdir=. --override-ini=pythonpath=. -p no:cacheprovider

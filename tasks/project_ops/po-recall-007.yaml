@@ -1,0 +1,15 @@
+id: po-recall-007
+topic: project_ops
+type: recall
+hops: 1
+needs:
+- memory
+- mcp
+turns:
+- What is the legal name of the Brightwave customer on the contract?
+gold: The contract names Brightwave GmbH.
+sources:
+- MTG-0919
+grader:
+  kind: llm_judge
+  rubric: Pass if the answer is Brightwave GmbH. Fail if it says only Brightwave with no legal form.

@@ -1,0 +1,19 @@
+id: cd-fix-009
+topic: coding
+type: code_fix
+hops: 2
+needs:
+- memory
+- mcp
+- code
+turns:
+- Point DECISION_SOURCE in tidepool_sync/retry_policy.py at the meeting that set the current cap, not
+  the original eng sync.
+gold: DECISION_SOURCE is MTG-0916.
+sources:
+- MTG-0916
+- MTG-0902
+grader:
+  kind: tests
+  hidden_tests: tasks/coding/hidden/cd-fix-009
+  command: python3 -m pytest -q tests/hidden --rootdir=. --override-ini=pythonpath=. -p no:cacheprovider

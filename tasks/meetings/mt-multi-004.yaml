@@ -1,0 +1,17 @@
+id: mt-multi-004
+topic: meetings
+type: multi_turn
+hops: 2
+needs:
+- memory
+- mcp
+- skill
+turns:
+- What did Brightwave's counsel accept in the legal review?
+- Draft the note back to counsel. Don't send it. Cover cap, renewal, subprocessors, and residency.
+gold: Cap 12 months of fees, renewal 90 days, subprocessors 30 days, residency EU.
+sources:
+- story
+grader:
+  kind: llm_judge
+  rubric: Judge the final turn. Pass if all four terms are present.

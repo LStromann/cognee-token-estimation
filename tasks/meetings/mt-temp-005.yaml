@@ -1,0 +1,16 @@
+id: mt-temp-005
+topic: meetings
+type: temporal
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- What is Northwind paying now?
+gold: $3100 per month for 5 connectors as of 2026-09-20. The $2400 pilot is over.
+sources:
+- MTG-0920
+- NP-7
+grader:
+  kind: llm_judge
+  rubric: Pass for $3100 and 5 connectors. Fail for the pilot price.

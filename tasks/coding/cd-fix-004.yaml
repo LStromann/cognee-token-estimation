@@ -1,0 +1,18 @@
+id: cd-fix-004
+topic: coding
+type: code_fix
+hops: 3
+needs:
+- memory
+- mcp
+- code
+turns:
+- Update SIGNATURE_HEADER in tidepool_sync/retry_policy.py to the header the launch review confirmed.
+gold: SIGNATURE_HEADER is X-Tidepool-Signature.
+sources:
+- MTG-0923
+- LIN-151
+grader:
+  kind: tests
+  hidden_tests: tasks/coding/hidden/cd-fix-004
+  command: python3 -m pytest -q tests/hidden --rootdir=. --override-ini=pythonpath=. -p no:cacheprovider

@@ -1,0 +1,15 @@
+id: mt-recall-009
+topic: meetings
+type: recall
+hops: 1
+needs:
+- memory
+- mcp
+turns:
+- How many days of subprocessor notice did counsel add, and who reported it?
+gold: 30 days, reported by Nora Berg in MTG-0919.
+sources:
+- MTG-0919
+grader:
+  kind: llm_judge
+  rubric: Pass if the number is 30 and the speaker is Nora.

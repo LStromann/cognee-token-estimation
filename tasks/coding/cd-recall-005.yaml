@@ -1,0 +1,15 @@
+id: cd-recall-005
+topic: coding
+type: recall
+hops: 1
+needs:
+- memory
+- code
+turns:
+- 'From memory of this repo: which file defines before_sleep_log?'
+gold: tenacity/before_sleep.py.
+sources:
+- repo
+grader:
+  kind: llm_judge
+  rubric: Pass if the path is tenacity/before_sleep.py.

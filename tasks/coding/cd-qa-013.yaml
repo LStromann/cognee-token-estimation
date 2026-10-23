@@ -1,0 +1,16 @@
+id: cd-qa-013
+topic: coding
+type: codebase_qa
+hops: 2
+needs:
+- code
+turns:
+- In this workspace, what does tidepool_sync/retry_policy.py currently set for max attempts, jitter, and
+  the signature header?
+gold: MAX_ATTEMPTS = 5, USE_JITTER = False, SIGNATURE_HEADER = 'X-Hub-Signature'. DECISION_SOURCE is MTG-0902.
+sources:
+- overlay
+grader:
+  kind: llm_judge
+  rubric: 'Pass if it reports the code as it is: max 5, jitter off, header X-Hub-Signature. Fail if it
+    reports the later decision instead of the code.'

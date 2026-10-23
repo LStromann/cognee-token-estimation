@@ -1,0 +1,18 @@
+id: po-multi-006
+topic: project_ops
+type: multi_turn
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- Which brand values and tagline are current, and which tagline was rejected?
+- 'Draft a #brand message Hana could pin. Don''t send it. Include the three values and the tagline.'
+gold: 'Values: Clear water, Honest sync, No dark patterns. Tagline: Sync that stays in its lane.. Rejected:
+  Move fast, sync faster.'
+sources:
+- story
+grader:
+  kind: llm_judge
+  rubric: Judge the final turn. Pass if all three values and the kept tagline are in the draft, and the
+    rejected tagline is not presented as current.

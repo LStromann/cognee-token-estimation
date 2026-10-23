@@ -1,0 +1,16 @@
+id: mt-temp-008
+topic: meetings
+type: temporal
+hops: 3
+needs:
+- memory
+- mcp
+turns:
+- Which SOC 2 vendor is current?
+gold: Vanta. Drata was evaluated and rejected.
+sources:
+- MTG-0908
+- NP-8
+grader:
+  kind: llm_judge
+  rubric: Pass for Vanta. Fail for Drata.

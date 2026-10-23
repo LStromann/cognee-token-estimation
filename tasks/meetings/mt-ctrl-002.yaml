@@ -1,0 +1,14 @@
+id: mt-ctrl-002
+topic: meetings
+type: control
+hops: 1
+needs:
+- mcp
+turns:
+- Who attended Granola meeting MTG-0911? List the user ids.
+gold: hana, maya, priya.
+sources:
+- named source
+grader:
+  kind: llm_judge
+  rubric: Pass if those three attendees are named. Fail if Jonas is included.

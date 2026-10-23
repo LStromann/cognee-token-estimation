@@ -1,0 +1,17 @@
+id: cd-fix-002
+topic: coding
+type: code_fix
+hops: 2
+needs:
+- memory
+- mcp
+- code
+turns:
+- Update tidepool_sync/retry_policy.py so jitter is enabled, matching the latest retry decision.
+gold: USE_JITTER is True.
+sources:
+- MTG-0916
+grader:
+  kind: tests
+  hidden_tests: tasks/coding/hidden/cd-fix-002
+  command: python3 -m pytest -q tests/hidden --rootdir=. --override-ini=pythonpath=. -p no:cacheprovider

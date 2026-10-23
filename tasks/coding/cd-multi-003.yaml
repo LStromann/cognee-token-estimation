@@ -1,0 +1,18 @@
+id: cd-multi-003
+topic: coding
+type: multi_turn
+hops: 2
+needs:
+- memory
+- mcp
+- code
+turns:
+- 'What does PR #91 change, according to GitHub?'
+- Is that PR consistent with the latest decision? Answer yes or no and state the diff in the cap and jitter.
+gold: 'No. PR #91 is max 5 without jitter. The decision is max 4 with jitter.'
+sources:
+- repo
+- mcp
+grader:
+  kind: llm_judge
+  rubric: Judge the final turn. Pass if the answer is no, PR cap 5 without jitter, decision 4 with jitter.

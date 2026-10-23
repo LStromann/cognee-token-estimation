@@ -1,0 +1,18 @@
+id: po-temp-008
+topic: project_ops
+type: temporal
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- When does Redis leave Render?
+gold: Not in the region-move window. Redis stays on Render until 2026-11-30, then ElastiCache. LIN-183
+  says to move it this week and is stale.
+sources:
+- LIN-183
+- MTG-0918
+- C05
+grader:
+  kind: llm_judge
+  rubric: Pass if the date is 2026-11-30. Fail if Redis moves immediately.

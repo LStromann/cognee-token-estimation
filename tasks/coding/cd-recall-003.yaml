@@ -1,0 +1,16 @@
+id: cd-recall-003
+topic: coding
+type: recall
+hops: 1
+needs:
+- memory
+- code
+turns:
+- 'From memory of this workspace: what integer is MAX_ATTEMPTS in tidepool_sync/retry_policy.py right
+  now, before any fix?'
+gold: 5. The module still records DECISION_SOURCE MTG-0902.
+sources:
+- repo
+grader:
+  kind: llm_judge
+  rubric: Pass if the answer is 5 as the current code, not the desired cap.

@@ -7,7 +7,7 @@ There is one proxy, one port and one counting method. Every LLM call goes throug
 Claude Code  ── ANTHROPIC_BASE_URL=http://127.0.0.1:8787 ─────────▶ source=claude ─┐
 Cognee (LLM) ── LLM endpoint      http://127.0.0.1:8787/cognee ──▶ source=cognee ─┴─▶ api.anthropic.com
 ```
-- **Cognee's LLM:** Cognee uses Claude as its LLM, so all tokens come from the same tokenizer and the same usage format. The `/cognee` path prefix tags Cognee's calls; the proxy strips it before forwarding.
+- **Cognee's LLM:** Cognee uses Claude as its LLM, so all tokens come from the same tokenizer and the same usage format. The `/cognee` path prefix tags Cognee's calls; the proxy strips it before forwarding. Cognee's Python Anthropic adapter ignores `LLM_ENDPOINT`. Route it by setting `ANTHROPIC_BASE_URL` to `http://127.0.0.1:8787/cognee` on Cognee's processes only (MCP server env and hook commands). Claude Code keeps the unprefixed URL, so its own calls stay `source=claude`. Embeddings stay on fastembed and are not counted.
 - **Embeddings:** these run locally (e.g. fastembed), so they use no API tokens. If you use an API embedding model instead, add a route for it. It is then reported separately and never added to the totals.
 - **Run tagging:** the harness tags each request with its run (`POST /_ctb/context`).
 - **What is never counted:** the judge and `count_tokens` calls go directly to the API.
@@ -23,7 +23,7 @@ Cognee (LLM) ── LLM endpoint      http://127.0.0.1:8787/cognee ──▶ sou
 
 ## How Cognee's context is found
 Nothing is added to the context for measurement.
-- **MCP:** tool results from `mcp__cognee__*` tools.
+- **MCP:** tool results whose names start with `mcp__cognee__` (standalone `cognee-mcp`) or `mcp__cognee-memory__` (the Claude plugin).
 - **Hooks, option A:** if the Cognee plugin already writes a hook log, set `cognee.hook_log.path` (and `text_field` for jsonl). The harness reads only the lines written during each run.
 - **Hooks, option B:** the harness wraps each real Cognee hook command (`cognee.hooks` in the config) in `harness/hooks/tee_hook.py`. The wrapper passes input, output and exit code through unchanged, and logs whatever the hook injected (plain stdout, `additionalContext`, or exit-2 stderr) to `$CTB_COGNEE_HOOK_LOG`. The analysis then finds that exact text in Claude's requests. **The Cognee plugin needs no changes.**
 - **Tool definitions:** the exact marginal token count of Cognee's tool definitions in each request, i.e. `count_tokens` with all tools minus `count_tokens` without Cognee's tools.

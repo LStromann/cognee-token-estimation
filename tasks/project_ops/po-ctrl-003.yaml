@@ -1,0 +1,14 @@
+id: po-ctrl-003
+topic: project_ops
+type: control
+hops: 1
+needs:
+- mcp
+turns:
+- Using only the Notion Glossary, what does warm standby mean here?
+gold: A second region that can take traffic but does not serve writes in normal operation.
+sources:
+- named page
+grader:
+  kind: llm_judge
+  rubric: 'Pass if the definition matches the glossary: can take traffic, does not serve writes normally.'

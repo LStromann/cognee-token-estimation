@@ -1,0 +1,19 @@
+id: po-temp-005
+topic: project_ops
+type: temporal
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- What is the current production topology we are building?
+gold: Single region eu-central-1 with a warm standby in eu-west-1. Active-active multi-region writes were
+  rejected. The infra page and LIN-170 still describe the rejected design.
+sources:
+- MTG-0918
+- NP-4
+- LIN-170
+grader:
+  kind: llm_judge
+  rubric: Pass if it names eu-central-1 and warm standby eu-west-1. Fail if active-active writes are the
+    answer.

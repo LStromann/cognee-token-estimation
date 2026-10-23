@@ -1,0 +1,19 @@
+id: po-xsrc-005
+topic: project_ops
+type: cross_source
+hops: 3
+needs:
+- memory
+- mcp
+turns:
+- Which signature header should new webhook work use, and which ticket is wrong about it?
+gold: 'Use X-Tidepool-Signature. LIN-151 and Notion NP-19 still say X-Hub-Signature. Jonas corrected this
+  in #launch after the launch review.'
+sources:
+- LIN-151
+- NP-19
+- C02
+grader:
+  kind: llm_judge
+  rubric: Pass if the current header is X-Tidepool-Signature and LIN-151 is stale. Fail if X-Hub-Signature
+    is given as current.

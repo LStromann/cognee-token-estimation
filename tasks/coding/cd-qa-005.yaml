@@ -1,0 +1,16 @@
+id: cd-qa-005
+topic: coding
+type: codebase_qa
+hops: 2
+needs:
+- code
+turns:
+- What is the difference between stop_after_delay and stop_before_delay?
+gold: Both are in tenacity/stop.py. stop_after_delay stops when seconds_since_start >= max_delay, which
+  can overshoot a pending wait. stop_before_delay stops when seconds_since_start + upcoming_sleep >= max_delay,
+  so the next sleep will not cross the limit.
+sources:
+- tenacity
+grader:
+  kind: llm_judge
+  rubric: Pass if both classes are distinguished and upcoming_sleep is mentioned for stop_before_delay.

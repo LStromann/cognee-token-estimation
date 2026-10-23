@@ -1,0 +1,16 @@
+id: po-recall-004
+topic: project_ops
+type: recall
+hops: 1
+needs:
+- memory
+- mcp
+turns:
+- Which SOC 2 vendor did we choose, and who owns that work?
+gold: We chose Vanta. Samir Haddad owns it. Drata was rejected at MTG-0908.
+sources:
+- MTG-0908
+- LIN-162
+grader:
+  kind: llm_judge
+  rubric: Pass if the vendor is Vanta and the owner is Samir. Fail if the answer is Drata.

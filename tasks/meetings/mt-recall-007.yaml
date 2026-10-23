@@ -1,0 +1,15 @@
+id: mt-recall-007
+topic: meetings
+type: recall
+hops: 1
+needs:
+- memory
+- mcp
+turns:
+- What price and connector count did we approve for the Northwind pilot, and on what date?
+gold: '2026-09-05: $2400 per month, 3 connectors. Maya said it was the pilot only.'
+sources:
+- MTG-0905
+grader:
+  kind: llm_judge
+  rubric: Pass if it is the pilot figure $2400 and 3 connectors, not the later expansion.

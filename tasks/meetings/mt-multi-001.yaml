@@ -2,9 +2,18 @@ id: mt-multi-001
 topic: meetings
 type: multi_turn
 hops: 2
-needs: [memory, mcp, skill]
+needs:
+- memory
+- mcp
+- skill
 turns:
-  - "What changed in the retry policy since the first decision, and why?"
-  - "Draft a Slack post for #support explaining what this means for Brightwave. Don't send it."
-gold: "Max retries reduced from 5 to 4 with jitter (2026-09-16) because Brightwave hit rate limits; post is <=3 lines: what changed, why, who to ask (Jonas)."
-grader: {kind: llm_judge, rubric: "Judge the final turn. Pass if the draft states 4 retries + jitter, the Brightwave rate-limit reason, and is <=3 lines."}
+- What changed in the retry policy since the first decision, and why?
+- 'Draft a Slack post for #support explaining what this means for Brightwave. Don''t send it.'
+gold: 'Max retries reduced from 5 to 4 with jitter on 2026-09-16 because Brightwave hit rate limits during
+  retry storms. Draft is <=3 lines: what changed, why, who to ask (Jonas).'
+sources:
+- story
+grader:
+  kind: llm_judge
+  rubric: Judge the final turn. Pass if the draft states 4 retries and jitter, the Brightwave rate-limit
+    reason, and is at most 3 lines.

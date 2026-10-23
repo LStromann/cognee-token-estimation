@@ -1,0 +1,16 @@
+id: po-recall-009
+topic: project_ops
+type: recall
+hops: 1
+needs:
+- memory
+- mcp
+turns:
+- Until which date does Redis stay on Render, and what does it move to?
+gold: Redis stays on Render until 2026-11-30, then moves to ElastiCache.
+sources:
+- MTG-0918
+- LIN-183
+grader:
+  kind: llm_judge
+  rubric: Pass if both the date 2026-11-30 and ElastiCache are present. Fail if it says Redis moves immediately.

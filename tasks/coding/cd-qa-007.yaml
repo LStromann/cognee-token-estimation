@@ -1,0 +1,15 @@
+id: cd-qa-007
+topic: coding
+type: codebase_qa
+hops: 2
+needs:
+- code
+turns:
+- How do you add two tenacity wait strategies together, and what class does that produce?
+gold: wait_base.__add__ returns wait_combine. wait_combine in tenacity/wait.py sums the strategy outputs
+  for the same retry state. Summing a list works because __radd__ treats 0 as the identity.
+sources:
+- tenacity
+grader:
+  kind: llm_judge
+  rubric: Pass if it names wait_combine and says the waits are summed.

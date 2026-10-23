@@ -2,11 +2,24 @@ id: po-act-001
 topic: project_ops
 type: action
 hops: 2
-needs: [memory, mcp, skill]
+needs:
+- memory
+- mcp
+- skill
 turns:
-  - "Create a Linear ticket to bring the retry spec in line with the latest decision, assigned to whoever owns the spec."
-gold: "New issue in Linear mentioning the retry spec/policy and max 4 + jitter, assigned to priya."
+- Create a Linear ticket to bring the retry spec in line with the latest decision, assigned to whoever
+  owns the spec. Use the Linear user id. In the description, state the current cap as '4 retries' and
+  mention jitter.
+gold: A new Linear issue assigned to priya whose description contains '4 retries' and jitter.
+sources:
+- MTG-0916
+- NP-1
 grader:
   kind: state_check
   checks:
-    - {server: linear, collection: issues, created_in_run: true, where: {assignee: priya, description_contains: "4"}}
+  - server: linear
+    collection: issues
+    created_in_run: true
+    where:
+      assignee: priya
+      description_contains: 4 retries

@@ -1,0 +1,17 @@
+id: po-recall-003
+topic: project_ops
+type: recall
+hops: 1
+needs:
+- memory
+- mcp
+turns:
+- Who leads the Webhooks GA project, and which ticket tracks signature verification?
+gold: Priya Nair leads the Webhooks GA project (PRJ-2). Signature verification is LIN-151, assigned to
+  tom.
+sources:
+- PRJ-2
+- LIN-151
+grader:
+  kind: llm_judge
+  rubric: Pass if it names Priya as project lead AND LIN-151. Fail if it names Jonas or Samir as the lead.

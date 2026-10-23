@@ -1,0 +1,17 @@
+id: po-multi-004
+topic: project_ops
+type: multi_turn
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- What changed in the Brightwave MSA negotiation, and what did not?
+- Draft a short note Nora could send to counsel. Don't file it. Include renewal, subprocessors, and the
+  cap.
+gold: Renewal is 90 days, subprocessor notice 30 days, cap unchanged at 12 months of fees.
+sources:
+- story
+grader:
+  kind: llm_judge
+  rubric: Judge the final turn. Pass if all three terms are in the note.

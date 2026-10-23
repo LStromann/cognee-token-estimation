@@ -1,0 +1,19 @@
+id: cd-fix-003
+topic: coding
+type: code_fix
+hops: 3
+needs:
+- memory
+- mcp
+- code
+turns:
+- Fix idempotent_key in tidepool_sync/retry_policy.py so two attempts for the same record share one key.
+  That is the Brightwave duplicate bug.
+gold: idempotent_key(record_id, attempt) returns the record id only.
+sources:
+- LIN-155
+- GH-88
+grader:
+  kind: tests
+  hidden_tests: tasks/coding/hidden/cd-fix-003
+  command: python3 -m pytest -q tests/hidden --rootdir=. --override-ini=pythonpath=. -p no:cacheprovider

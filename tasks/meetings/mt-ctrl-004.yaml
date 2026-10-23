@@ -1,0 +1,14 @@
+id: mt-ctrl-004
+topic: meetings
+type: control
+hops: 1
+needs:
+- mcp
+turns:
+- What is the title of Notion page NP-3?
+gold: Onboarding Checklist.
+sources:
+- named source
+grader:
+  kind: llm_judge
+  rubric: Pass if the title is Onboarding Checklist.

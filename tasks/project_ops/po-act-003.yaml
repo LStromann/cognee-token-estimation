@@ -1,0 +1,24 @@
+id: po-act-003
+topic: project_ops
+type: action
+hops: 2
+needs:
+- memory
+- mcp
+- skill
+turns:
+- Open a Linear ticket assigned to nora to correct the Brightwave renewal notice. The description must
+  contain '90 days'.
+gold: New issue assigned to nora stating the 90-day renewal notice.
+sources:
+- MTG-0919
+- NP-6
+grader:
+  kind: state_check
+  checks:
+  - server: linear
+    collection: issues
+    created_in_run: true
+    where:
+      assignee: nora
+      description_contains: 90 days

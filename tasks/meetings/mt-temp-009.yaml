@@ -1,0 +1,16 @@
+id: mt-temp-009
+topic: meetings
+type: temporal
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- Who is primary on-call on a weekday?
+gold: tom. Samir covers weekends. Jonas is escalation only. The on-call page still calls Jonas primary.
+sources:
+- MTG-0912
+- NP-9
+grader:
+  kind: llm_judge
+  rubric: Pass if the weekday primary is tom. Fail if it is Jonas.

@@ -1,0 +1,16 @@
+id: mt-recall-004
+topic: meetings
+type: recall
+hops: 1
+needs:
+- memory
+- mcp
+turns:
+- Which tagline did the brand workshop reject, and which one stayed?
+gold: Rejected 'Move fast, sync faster'. Kept 'Sync that stays in its lane.'.
+sources:
+- MTG-0911
+- C06
+grader:
+  kind: llm_judge
+  rubric: Pass if both taglines are present and only the kept one is current.

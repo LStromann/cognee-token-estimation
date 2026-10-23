@@ -1,0 +1,20 @@
+id: cd-xsrc-002
+topic: coding
+type: cross_source
+hops: 3
+needs:
+- memory
+- mcp
+- code
+turns:
+- LIN-142 names a base delay and a cap. Which of those is still right, and which tenacity parameter is
+  the base?
+gold: Base 2s is still right and corresponds to wait_exponential's multiplier (or exp growth from that
+  base). The cap of 5 is stale; today it is 4. stop_after_attempt is the tenacity stop that enforces a
+  cap.
+sources:
+- overlay
+- mcp
+grader:
+  kind: llm_judge
+  rubric: Pass if the base 2s stays, the cap is now 4, and stop_after_attempt is named.

@@ -1,0 +1,15 @@
+id: po-recall-006
+topic: project_ops
+type: recall
+hops: 1
+needs:
+- memory
+- mcp
+turns:
+- Who approved the expanded Northwind price, and in which meeting?
+gold: Maya Chen approved $3100/mo at MTG-0920 on 2026-09-20.
+sources:
+- MTG-0920
+grader:
+  kind: llm_judge
+  rubric: Pass if it names Maya and the 2026-09-20 expansion meeting. Fail if it only cites the pilot.

@@ -1,0 +1,22 @@
+id: mt-act-006
+topic: meetings
+type: action
+hops: 2
+needs:
+- memory
+- mcp
+- skill
+turns:
+- 'Post the standby region in #infra (C05). The message must contain eu-west-1.'
+gold: 'A new #infra message containing eu-west-1.'
+sources:
+- MTG-0918
+grader:
+  kind: state_check
+  checks:
+  - server: slack
+    collection: messages
+    created_in_run: true
+    where:
+      channel: C05
+      text_contains: eu-west-1

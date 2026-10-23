@@ -1,0 +1,19 @@
+id: cd-temp-002
+topic: coding
+type: temporal
+hops: 2
+needs:
+- memory
+- mcp
+- code
+turns:
+- Should tidepool_sync turn jitter on?
+gold: Yes. MTG-0916 added jitter because Brightwave hit rate limits during retry storms. The code's USE_JITTER
+  is still False. In tenacity, wait_random_exponential or wait_exponential_jitter is the matching strategy,
+  not plain wait_exponential.
+sources:
+- overlay
+- meetings
+grader:
+  kind: llm_judge
+  rubric: Pass if jitter should be on. Fail if it says the fixed wait_exponential strategy is enough.

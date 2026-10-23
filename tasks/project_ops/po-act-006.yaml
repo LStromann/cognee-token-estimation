@@ -1,0 +1,24 @@
+id: po-act-006
+topic: project_ops
+type: action
+hops: 2
+needs:
+- memory
+- mcp
+- skill
+turns:
+- 'Post in #support (channel id C03) telling support which header retries must send. Include the exact
+  header name Idempotency-Key.'
+gold: 'A new #support message containing Idempotency-Key.'
+sources:
+- C01
+- LIN-155
+grader:
+  kind: state_check
+  checks:
+  - server: slack
+    collection: messages
+    created_in_run: true
+    where:
+      channel: C03
+      text_contains: Idempotency-Key

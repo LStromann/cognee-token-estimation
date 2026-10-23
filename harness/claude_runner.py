@@ -13,7 +13,7 @@ def claude_version(binary="claude"):
 
 
 def run_turn(prompt, *, model, slot, mcp_config, settings, ccfg, resume=None, raw_log=None, extra_env=None):
-    cmd = [ccfg["binary"], "-p", prompt, "--output-format", "stream-json", "--verbose",
+    cmd = [ccfg["binary"], *(ccfg.get("binary_args") or []), "-p", prompt, "--output-format", "stream-json", "--verbose",
            "--model", model, "--mcp-config", str(mcp_config), "--strict-mcp-config",
            "--max-turns", str(ccfg["max_turns"]), "--permission-mode", ccfg["permission_mode"]]
     if settings:

@@ -1,0 +1,17 @@
+id: po-xsrc-008
+topic: project_ops
+type: cross_source
+hops: 3
+needs:
+- memory
+- mcp
+turns:
+- Which SOC 2 tool should the open ticket be updated to, and what does it say today?
+gold: LIN-162 and NP-8 still say evaluate Drata. The decision at MTG-0908 was Vanta, owned by Samir.
+sources:
+- LIN-162
+- NP-8
+- MTG-0908
+grader:
+  kind: llm_judge
+  rubric: Pass if Vanta is the choice and Drata is the stale one.

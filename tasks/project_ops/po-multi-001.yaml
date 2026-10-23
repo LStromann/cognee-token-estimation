@@ -1,0 +1,19 @@
+id: po-multi-001
+topic: project_ops
+type: multi_turn
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- What changed in the retry cap since the first decision, and why?
+- 'Draft a Slack post for #support. Don''t send it. Follow the team Slack convention: at most 3 lines,
+  covering what changed, why, and who to ask.'
+gold: Max retries went from 5 to 4 with jitter on 2026-09-16 because Brightwave hit rate limits during
+  retry storms. Draft is <=3 lines and points at Jonas.
+sources:
+- story
+grader:
+  kind: llm_judge
+  rubric: Judge the final turn. Pass if the draft states 4 retries with jitter, the Brightwave rate-limit
+    reason, names who to ask, and is at most 3 lines.

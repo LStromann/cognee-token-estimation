@@ -1,0 +1,18 @@
+id: po-multi-002
+topic: project_ops
+type: multi_turn
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- What did we decide to build for regions, and what did we reject?
+- Draft a Linear comment for LIN-170. Don't post it. It should say what to build instead.
+gold: Build eu-central-1 with warm standby eu-west-1. Reject active-active multi-region writes. The draft
+  says that.
+sources:
+- story
+grader:
+  kind: llm_judge
+  rubric: Judge the final turn. Pass if the draft rejects active-active writes and names eu-central-1
+    and eu-west-1.

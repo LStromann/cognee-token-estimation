@@ -1,8 +1,27 @@
 topic: meetings
+# Granola transcripts plus the docs and tickets they updated. Do not ask the eval questions.
 sessions:
   - id: w1
-    turns: ["Summarise my September meetings with decisions and owners."]
+    turns:
+      - "List my September Granola meetings with date, title, and the decision each one claims to have made. Skip the offsite and the Q2 retro."
   - id: w2
-    turns: ["What did the launch review on Sep 23 decide and who has follow-ups?"]
+    turns:
+      - "Read the 2 September eng sync transcript and the Sync Retry Policy page. What cap and backoff did that meeting record?"
   - id: w3
-    turns: ["Go through the Sep 16 eng sync transcript. Anything that contradicts our Notion docs?"]
+    turns:
+      - "Read the 16 September eng sync transcript. What changed relative to 2 September, why was Brightwave the example, and which suggested cap was explicitly rejected?"
+  - id: w4
+    turns:
+      - "Read the 23 September launch review. What moved, what stayed a private beta, and which ticket is the blocker? Check #launch only to see who restated it."
+  - id: w5
+    turns:
+      - "Read the 18 September infra review and the 9 September design draft in Notion. Which topology was adopted, and which sentence on the Notion page is only a draft?"
+  - id: w6
+    turns:
+      - "Read the 11 September brand workshop transcript and the Brand Values page. Which values and tagline were adopted, and which tagline was rejected?"
+  - id: w7
+    turns:
+      - "Read the 19 September legal review and the 20 September pricing chat. Note renewal notice, subprocessor notice, and who approved the Northwind number."
+  - id: w8
+    turns:
+      - "Read the 14 September incident review and the 12 September on-call meeting. Write a CLAUDE.md memory that later sessions can use: current decisions, the meeting id that set each one, and which older meeting is now historical."

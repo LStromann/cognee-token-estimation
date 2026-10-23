@@ -1,0 +1,24 @@
+id: po-act-007
+topic: project_ops
+type: action
+hops: 2
+needs:
+- memory
+- mcp
+- skill
+turns:
+- Open a Linear ticket assigned to hana to fix the brand page. The description must contain the phrase
+  Clear water.
+gold: New issue assigned to hana that names the Clear water value.
+sources:
+- MTG-0911
+- NP-5
+grader:
+  kind: state_check
+  checks:
+  - server: linear
+    collection: issues
+    created_in_run: true
+    where:
+      assignee: hana
+      description_contains: Clear water

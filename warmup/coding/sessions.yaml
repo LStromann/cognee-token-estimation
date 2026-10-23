@@ -1,6 +1,27 @@
 topic: coding
+# Walk the pinned tenacity checkout and the Tidepool overlay. Do not ask the eval questions.
 sessions:
   - id: w1
-    turns: ["Give me a tour of this repo: main modules, how sync works, where retries happen."]  # TODO adapt to pinned repo
+    turns:
+      - "Tour this checkout. Name the tenacity modules that decide whether a call is retried, how long it waits, and what runs before each sleep. Then open tidepool_sync/retry_policy.py and say what it imports from the library versus what it hard-codes."
   - id: w2
-    turns: ["Look at PR #91 and LIN-142. How does the change fit into the codebase?"]
+    turns:
+      - "Read tenacity/wait.py. Summarise wait_exponential, wait_random_exponential, and wait_exponential_jitter, including which one adds jitter and which parameters are deprecated."
+  - id: w3
+    turns:
+      - "Read tenacity/stop.py. Summarise stop_after_attempt, stop_after_delay, and stop_before_delay, and note whether a delay stop can overshoot."
+  - id: w4
+    turns:
+      - "Read tenacity/retry.py and tenacity/before_sleep.py. How does retry_if_exception_type decide, and what does before_sleep_log receive?"
+  - id: w5
+    turns:
+      - "Look at tidepool_sync/retry_policy.py next to LIN-142, PR #91, and the Sync Reliability notes. List every constant that still matches the 2 September decision."
+  - id: w6
+    turns:
+      - "Read the 16 September eng sync and the Brightwave thread in #eng. What did they change about retries, the idempotency header, and the webhook signature header? Do not edit files."
+  - id: w7
+    turns:
+      - "Find where tenacity combines wait strategies (wait_combine and wait_chain) and where sleep is implemented. One paragraph a new teammate could use."
+  - id: w8
+    turns:
+      - "Write a short note in CLAUDE.md covering: tenacity's public retry entry points, the Tidepool overlay file, and which Fernhill sources are newer than the constants in that file."

@@ -1,0 +1,20 @@
+id: mt-multi-006
+topic: meetings
+type: multi_turn
+hops: 2
+needs:
+- memory
+- mcp
+- skill
+turns:
+- What happened in the INC-19 bridge?
+- Draft a customer note Lea could send to Brightwave. Don't send it. No ticket ids, per the release-notes
+  style of customer language.
+gold: SEV-2 on 2026-09-14 caused by a retry storm that duplicated records. Customer language, no LIN-
+  ids.
+sources:
+- story
+grader:
+  kind: llm_judge
+  rubric: Judge the final turn. Pass if the note explains duplicates from retries, names the severity
+    or the impact, and does not include a LIN- id.

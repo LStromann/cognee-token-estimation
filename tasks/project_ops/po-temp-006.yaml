@@ -1,0 +1,18 @@
+id: po-temp-006
+topic: project_ops
+type: temporal
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- How long do we keep sync logs?
+gold: '30 days. The privacy page still says 90 days. Nora stated the shorter retention in the legal review
+  and in #legal.'
+sources:
+- NP-10
+- C07
+- MTG-0919
+grader:
+  kind: llm_judge
+  rubric: Pass if retention is 30 days. Fail if it is 90.

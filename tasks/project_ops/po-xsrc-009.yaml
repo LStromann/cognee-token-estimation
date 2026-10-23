@@ -1,0 +1,18 @@
+id: po-xsrc-009
+topic: project_ops
+type: cross_source
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- 'Does the hiring ticket match what Maya said in #product?'
+gold: No. LIN-190 and NP-11 say Rina Sol accepted. Maya said Rina Sol declined and named Oleg Petrov for
+  3 months from 2026-10-06.
+sources:
+- LIN-190
+- NP-11
+- C04
+grader:
+  kind: llm_judge
+  rubric: Pass if Oleg Petrov is the current plan and Rina Sol declined.

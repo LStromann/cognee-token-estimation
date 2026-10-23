@@ -1,0 +1,16 @@
+id: cd-recall-001
+topic: coding
+type: recall
+hops: 1
+needs:
+- memory
+- code
+turns:
+- 'From memory of this repo: which file defines wait_exponential, and does that class jitter?'
+gold: tenacity/wait.py defines wait_exponential, and that class does not jitter. Jitter is wait_random_exponential
+  or wait_exponential_jitter.
+sources:
+- repo
+grader:
+  kind: llm_judge
+  rubric: Pass if the file and the no-jitter fact are both correct.

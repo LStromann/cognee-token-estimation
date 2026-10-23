@@ -1,0 +1,15 @@
+id: cd-qa-008
+topic: coding
+type: codebase_qa
+hops: 2
+needs:
+- code
+turns:
+- How does wait_chain pick which strategy to use on a given attempt?
+gold: wait_chain in tenacity/wait.py indexes strategies by attempt_number (clamped to the last strategy).
+  After the list is exhausted it keeps using the last strategy. An empty chain raises ValueError.
+sources:
+- tenacity
+grader:
+  kind: llm_judge
+  rubric: Pass if selection is by attempt number and the last strategy repeats.

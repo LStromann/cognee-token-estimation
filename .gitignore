@@ -1,6 +1,12 @@
 results/*
 !results/.gitkeep
+!results/dry-run-synthetic/
+results/dry-run-synthetic/*
+!results/dry-run-synthetic/report.md
+!results/dry-run-synthetic/pairs.csv
+!results/dry-run-synthetic/ingest.json
 __pycache__/
 *.pyc
 .venv/
 *.egg-info/
+.pytest_cache/

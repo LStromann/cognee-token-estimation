@@ -1,0 +1,16 @@
+id: cd-qa-002
+topic: coding
+type: codebase_qa
+hops: 1
+needs:
+- code
+turns:
+- Which tenacity class implements full jitter exponential backoff, and how is the sleep chosen?
+gold: wait_random_exponential in tenacity/wait.py subclasses wait_exponential and returns random.uniform(self.min,
+  high), where high is the exponential wait from the parent.
+sources:
+- tenacity
+grader:
+  kind: llm_judge
+  rubric: Pass if it names wait_random_exponential, the file, and random.uniform between min and the exponential
+    high.

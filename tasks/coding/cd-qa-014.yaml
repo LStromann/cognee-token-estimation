@@ -1,0 +1,16 @@
+id: cd-qa-014
+topic: coding
+type: codebase_qa
+hops: 1
+needs:
+- code
+turns:
+- What does tidepool_sync.retry_policy.idempotent_key return, and why would that duplicate records?
+gold: It returns '{record_id}:{attempt}'. The attempt number changes on every try, so a retry is not the
+  same key and is stored again.
+sources:
+- overlay
+grader:
+  kind: llm_judge
+  rubric: Pass if the format includes the attempt and the answer says that makes retries look like new
+    writes.

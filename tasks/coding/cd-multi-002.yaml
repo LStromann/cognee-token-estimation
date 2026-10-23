@@ -1,0 +1,18 @@
+id: cd-multi-002
+topic: coding
+type: multi_turn
+hops: 2
+needs:
+- memory
+- mcp
+- code
+turns:
+- How does idempotent_key in this repo relate to the Brightwave duplicate reports?
+- Write the replacement behavior in one sentence, including the header name. Don't edit files yet.
+gold: The key must be stable per record (no attempt number) and the header is Idempotency-Key.
+sources:
+- repo
+- mcp
+grader:
+  kind: llm_judge
+  rubric: Judge the final turn. Pass if the key is stable and the header is Idempotency-Key.

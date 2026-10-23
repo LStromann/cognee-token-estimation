@@ -7,7 +7,17 @@
    "labels": [
     "bug"
    ],
-   "body": "Customer Brightwave sees duplicates after failed sync. Linear: LIN-155.",
+   "body": "Customer Brightwave sees duplicates after a failed sync. Linear: LIN-155. Idempotency key includes the attempt.",
+   "comments": []
+  },
+  {
+   "number": 104,
+   "title": "Document webhook signatures",
+   "state": "open",
+   "labels": [
+    "docs"
+   ],
+   "body": "Docs say the signature header is X-Hub-Signature. Linear: LIN-151.",
    "comments": []
   }
  ],
@@ -16,10 +26,30 @@
    "number": 91,
    "title": "Exponential backoff for sync retries",
    "state": "open",
-   "body": "Implements LIN-142. max_retries=5 per spec.",
+   "body": "Implements LIN-142. max_retries=5 per spec. No jitter.",
    "files": [
-    "sync/retry.py",
+    "tidepool_sync/retry_policy.py",
     "tests/test_retry.py"
+   ],
+   "comments": []
+  },
+  {
+   "number": 102,
+   "title": "Active-active region terraform",
+   "state": "open",
+   "body": "Implements LIN-170. Two regions accept writes. Also moves Redis immediately.",
+   "files": [
+    "infra/regions.tf"
+   ],
+   "comments": []
+  },
+  {
+   "number": 110,
+   "title": "Attempt-scoped idempotency keys",
+   "state": "open",
+   "body": "Puts the attempt number in the idempotency key so each try is unique.",
+   "files": [
+    "tidepool_sync/retry_policy.py"
    ],
    "comments": []
   }

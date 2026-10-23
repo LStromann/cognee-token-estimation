@@ -1,0 +1,15 @@
+id: mt-recall-008
+topic: meetings
+type: recall
+hops: 1
+needs:
+- memory
+- mcp
+turns:
+- Who said the Webhooks GA date out loud in the launch review, and what date did they say?
+gold: Maya Chen said Nov 5.
+sources:
+- MTG-0923
+grader:
+  kind: llm_judge
+  rubric: Pass if the speaker is Maya and the date is Nov 5.

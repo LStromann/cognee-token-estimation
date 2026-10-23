@@ -1,0 +1,24 @@
+id: po-act-005
+topic: project_ops
+type: action
+hops: 2
+needs:
+- memory
+- mcp
+- skill
+turns:
+- Open a Linear ticket assigned to tom to rename the webhook signature header. The description must contain
+  X-Tidepool-Signature.
+gold: New issue assigned to tom naming X-Tidepool-Signature.
+sources:
+- LIN-151
+- C02
+grader:
+  kind: state_check
+  checks:
+  - server: linear
+    collection: issues
+    created_in_run: true
+    where:
+      assignee: tom
+      description_contains: X-Tidepool-Signature

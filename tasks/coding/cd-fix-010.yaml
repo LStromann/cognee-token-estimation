@@ -1,0 +1,18 @@
+id: cd-fix-010
+topic: coding
+type: code_fix
+hops: 3
+needs:
+- memory
+- mcp
+- code
+turns:
+- Fix record_identity in tidepool_sync/retry_policy.py so the stored identity of a record does not change
+  between attempts. Same bug class as the Brightwave duplicates.
+gold: record_identity(record_id, attempt) returns the record id only.
+sources:
+- LIN-155
+grader:
+  kind: tests
+  hidden_tests: tasks/coding/hidden/cd-fix-010
+  command: python3 -m pytest -q tests/hidden --rootdir=. --override-ini=pythonpath=. -p no:cacheprovider

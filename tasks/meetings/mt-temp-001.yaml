@@ -1,0 +1,17 @@
+id: mt-temp-001
+topic: meetings
+type: temporal
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- What is the current retry cap, including whether jitter is used?
+gold: Max 4 with jitter, from 2026-09-16. The earlier cap of 5 and the rejected cap of 3 are not current.
+sources:
+- MTG-0916
+- NP-1
+- LIN-149
+grader:
+  kind: llm_judge
+  rubric: Pass if the answer is 4 with jitter. Fail for 5 or 3.

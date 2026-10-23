@@ -1,0 +1,19 @@
+id: cd-fix-001
+topic: coding
+type: code_fix
+hops: 2
+needs:
+- memory
+- mcp
+- code
+turns:
+- Update tidepool_sync/retry_policy.py so MAX_ATTEMPTS matches the latest retry decision. Do not change
+  unrelated files.
+gold: MAX_ATTEMPTS is 4.
+sources:
+- MTG-0916
+- retry_policy.py
+grader:
+  kind: tests
+  hidden_tests: tasks/coding/hidden/cd-fix-001
+  command: python3 -m pytest -q tests/hidden --rootdir=. --override-ini=pythonpath=. -p no:cacheprovider

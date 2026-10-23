@@ -1,0 +1,17 @@
+id: mt-temp-002
+topic: meetings
+type: temporal
+hops: 3
+needs:
+- memory
+- mcp
+turns:
+- What is the current Webhooks GA date?
+gold: Nov 5, set by Maya on 2026-09-23. Oct 15 is the stale plan date. Oct 1 was the private beta only.
+sources:
+- MTG-0923
+- NP-2
+- LIN-158
+grader:
+  kind: llm_judge
+  rubric: Pass only for Nov 5. Fail for Oct 15 or Oct 1.

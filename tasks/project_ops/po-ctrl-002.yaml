@@ -1,0 +1,14 @@
+id: po-ctrl-002
+topic: project_ops
+type: control
+hops: 1
+needs:
+- mcp
+turns:
+- From the Notion page 'Team Directory', what is Nora Berg's role and user id?
+gold: Nora Berg is Legal, user id nora.
+sources:
+- named page
+grader:
+  kind: llm_judge
+  rubric: Pass if the role is Legal and the id is nora.

@@ -1,0 +1,18 @@
+id: cd-temp-001
+topic: coding
+type: temporal
+hops: 2
+needs:
+- memory
+- mcp
+- code
+turns:
+- What max attempt count should tidepool_sync use today?
+gold: 4. The file still has 5 from MTG-0902. MTG-0916 changed the cap and added jitter. A cap of 3 was
+  rejected.
+sources:
+- overlay
+- meetings
+grader:
+  kind: llm_judge
+  rubric: Pass if the answer is 4. Fail for 5 or 3.

@@ -1,0 +1,22 @@
+id: mt-act-003
+topic: meetings
+type: action
+hops: 2
+needs:
+- memory
+- mcp
+- skill
+turns:
+- 'Post the locked brand values in #brand (C06). The message must contain ''No dark patterns''.'
+gold: 'A new #brand message containing No dark patterns.'
+sources:
+- MTG-0911
+grader:
+  kind: state_check
+  checks:
+  - server: slack
+    collection: messages
+    created_in_run: true
+    where:
+      channel: C06
+      text_contains: No dark patterns

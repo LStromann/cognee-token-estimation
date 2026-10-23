@@ -1,0 +1,15 @@
+id: cd-recall-004
+topic: coding
+type: recall
+hops: 1
+needs:
+- memory
+- code
+turns:
+- 'From memory of this repo: which class is tenacity''s full-jitter exponential wait?'
+gold: wait_random_exponential in tenacity/wait.py.
+sources:
+- repo
+grader:
+  kind: llm_judge
+  rubric: Pass if the class name is wait_random_exponential. Fail if the answer is wait_exponential.

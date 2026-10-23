@@ -1,0 +1,17 @@
+id: mt-temp-010
+topic: meetings
+type: temporal
+hops: 3
+needs:
+- memory
+- mcp
+turns:
+- Is 'Move fast, sync faster' one of our brand values?
+gold: No. It was rejected at MTG-0911. Current values are Clear water, Honest sync, No dark patterns.
+  The brand page still shows the rejected line.
+sources:
+- MTG-0911
+- NP-5
+grader:
+  kind: llm_judge
+  rubric: Pass if the phrase is rejected and at least two of the three current values are named.

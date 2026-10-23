@@ -11,33 +11,163 @@
   {
    "id": "C03",
    "name": "support"
+  },
+  {
+   "id": "C04",
+   "name": "product"
+  },
+  {
+   "id": "C05",
+   "name": "infra"
+  },
+  {
+   "id": "C06",
+   "name": "brand"
+  },
+  {
+   "id": "C07",
+   "name": "legal"
   }
  ],
  "messages": [
   {
    "channel": "C03",
-   "ts": "1757670000.000100",
    "user": "lea",
-   "text": "Brightwave reports duplicate records after a failed sync. Filed LIN-155."
+   "ts": "1757670000.000100",
+   "text": "Brightwave reports duplicate records after a failed sync. Filed LIN-155 and GitHub #88."
+  },
+  {
+   "channel": "C03",
+   "user": "tom",
+   "ts": "1757671000.000100",
+   "thread_ts": "1757670000.000100",
+   "text": "The idempotency key includes the attempt number, so a retry looks like a new write."
   },
   {
    "channel": "C01",
-   "ts": "1758020000.000100",
    "user": "jonas",
-   "text": "Confirmed: sync retries now max 4 with jitter (Brightwave rate limits)."
+   "ts": "1758020000.000100",
+   "text": "Confirmed: sync retries now max 4 with jitter (Brightwave hit rate limits during retry storms). Cap of 3 was rejected."
   },
   {
    "channel": "C01",
+   "user": "tom",
    "ts": "1758020100.000200",
    "thread_ts": "1758020000.000100",
-   "user": "tom",
-   "text": "Will change the code; haven't touched LIN-142 or the spec."
+   "text": "Will change the code; haven't touched LIN-142 or the spec. They still say 5."
+  },
+  {
+   "channel": "C01",
+   "user": "jonas",
+   "ts": "1758020200.000300",
+   "thread_ts": "1758020000.000100",
+   "text": "Also require Idempotency-Key on POST /sync."
   },
   {
    "channel": "C02",
-   "ts": "1758630000.000100",
    "user": "priya",
-   "text": "Webhooks GA is now Nov 5. I'll update the launch plan later."
+   "ts": "1758630000.000100",
+   "text": "Webhooks GA is now Nov 5. I'll update the launch plan later. It still says Oct 15."
+  },
+  {
+   "channel": "C02",
+   "user": "jonas",
+   "ts": "1758630100.000200",
+   "thread_ts": "1758630000.000100",
+   "text": "Header for signatures is X-Tidepool-Signature. Please stop writing X-Hub-Signature."
+  },
+  {
+   "channel": "C02",
+   "user": "priya",
+   "ts": "1758630200.000300",
+   "text": "webhooks_v2 stays off until Nov 5. Owner is Tom."
+  },
+  {
+   "channel": "C05",
+   "user": "samir",
+   "ts": "1758200000.000100",
+   "text": "Final infra call: eu-central-1 with a warm standby in eu-west-1. Not active-active multi-region writes."
+  },
+  {
+   "channel": "C05",
+   "user": "maya",
+   "ts": "1758200100.000200",
+   "thread_ts": "1758200000.000100",
+   "text": "Redis stays on Render until 2026-11-30, then ElastiCache."
+  },
+  {
+   "channel": "C05",
+   "user": "samir",
+   "ts": "1758200200.000300",
+   "text": "LIN-170 and PR 102 still describe active-active. They are stale."
+  },
+  {
+   "channel": "C06",
+   "user": "hana",
+   "ts": "1757600000.000100",
+   "text": "Workshop locked the values: Clear water, Honest sync, No dark patterns. Tagline remains 'Sync that stays in its lane.'."
+  },
+  {
+   "channel": "C06",
+   "user": "maya",
+   "ts": "1757600100.000200",
+   "thread_ts": "1757600000.000100",
+   "text": "'Move fast, sync faster' is rejected. The Notion brand page is stale."
+  },
+  {
+   "channel": "C07",
+   "user": "nora",
+   "ts": "1758300000.000100",
+   "text": "Brightwave renewal notice is 90 days. Subprocessor notice is 30 days. Cap stays 12 months of fees."
+  },
+  {
+   "channel": "C07",
+   "user": "nora",
+   "ts": "1758300100.000200",
+   "text": "Sync-log retention is 30 days, not 90. Privacy page is stale."
+  },
+  {
+   "channel": "C04",
+   "user": "priya",
+   "ts": "1758400000.000100",
+   "text": "Northwind is now $3100/mo for 5 connectors. Maya approved in MTG-0920. Pricing page still shows $2400."
+  },
+  {
+   "channel": "C04",
+   "user": "maya",
+   "ts": "1758400100.000200",
+   "thread_ts": "1758400000.000100",
+   "text": "Rina Sol declined. Contractor Oleg Petrov for 3 months starting 2026-10-06."
+  },
+  {
+   "channel": "C01",
+   "user": "samir",
+   "ts": "1757900000.000100",
+   "text": "SOC 2 tool is Vanta. Drata is not in the running. Security page is stale."
+  },
+  {
+   "channel": "C01",
+   "user": "jonas",
+   "ts": "1757950000.000100",
+   "text": "On-call: tom weekdays, samir weekends, escalate to jonas. Notion still says I am primary."
+  },
+  {
+   "channel": "C03",
+   "user": "lea",
+   "ts": "1757700000.000100",
+   "text": "INC-19 (2026-09-14) was SEV-2 for Brightwave. Cause: retry storm."
+  },
+  {
+   "channel": "C01",
+   "user": "tom",
+   "ts": "1758500000.000100",
+   "text": "Random idea, ignore: what if retries waited a fixed 30s? Not a decision."
+  },
+  {
+   "channel": "C04",
+   "user": "priya",
+   "ts": "1755000000.000100",
+   "text": "Q2 retro actions are booked. No product change in that thread."
   }
  ]
 }

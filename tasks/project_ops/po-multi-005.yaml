@@ -1,0 +1,18 @@
+id: po-multi-005
+topic: project_ops
+type: multi_turn
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- What is the current on-call rotation?
+- 'Draft a #eng message announcing it. Don''t send it. Name weekday, weekend, and escalation using user
+  ids.'
+gold: tom weekdays, samir weekends, escalate to jonas.
+sources:
+- story
+grader:
+  kind: llm_judge
+  rubric: Judge the final turn. Pass if all three ids are in the draft and Jonas is escalation rather
+    than primary.

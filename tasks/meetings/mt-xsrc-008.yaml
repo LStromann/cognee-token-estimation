@@ -1,0 +1,17 @@
+id: mt-xsrc-008
+topic: meetings
+type: cross_source
+hops: 2
+needs:
+- memory
+- mcp
+turns:
+- Does the brand page match the values workshop?
+gold: No. NP-5 still leads with move-fast and 'Move fast, sync faster'. The workshop locked Clear water,
+  Honest sync, No dark patterns and kept 'Sync that stays in its lane.'.
+sources:
+- NP-5
+- MTG-0911
+grader:
+  kind: llm_judge
+  rubric: Pass if the three workshop values are current and the page's move-fast line is stale.
